@@ -1,0 +1,9 @@
+.vscode
+node_modules
+init.sh
+__pycache__
+package-lock.json
+.gcloudignore
+.pytest_cache
+env
+.pyc
