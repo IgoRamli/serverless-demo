@@ -1,8 +1,8 @@
 {
-    "apiKey": "YOUR-API-KEY",
-    "authDomain": "YOUR-AUTH-DOMAIN",
-    "databaseURL": "YOUR-DATABASE-URL",
-    "projectId": "YOUR-PROJECT-ID",
-    "storageBucket": "YOUR-STORAGE-BUCKET",
-    "messagingSenderId": "YOUR-MESSAGING-SENDER-ID"
+    "apiKey": "AIzaSyCUQZM-V1B93uPp4mW2V2DZFfDW3qph050",
+    "authDomain": "intern-prj-1.firebaseapp.com",
+    "databaseURL": "https://intern-prj-1.firebaseio.com",
+    "projectId": "intern-prj-1",
+    "storageBucket": "intern-prj-1.appspot.com",
+    "messagingSenderId": "750043832968"
 }
