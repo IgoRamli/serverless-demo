@@ -42,12 +42,12 @@ steps:
   args: ['functions', 'deploy', 'detect_labels', '--source=./functions/detect_labels/', '--runtime=python37', '--trigger-topic=new-product', '--env-vars-file=./extras/cloudbuild/functions_env_vars.yaml']
 # Cloud Build Step #7: Deploy the Cloud Function for processing payments using
 # Stripe API.
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args: ['functions', 'deploy', 'pay_with_stripe', '--source=./functions/pay_with_stripe/', '--runtime=python37', '--trigger-topic=payment-process', '--env-vars-file=./extras/cloudbuild/functions_env_vars.yaml']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'deploy', 'pay_with_stripe', '--source=./functions/pay_with_stripe/', '--runtime=python37', '--trigger-topic=payment-process', '--env-vars-file=./extras/cloudbuild/functions_env_vars.yaml']
 # Cloud Build Step #8: Deploy the Cloud Function for sending order confirmation
 # emails using SendGrid API.
-# - name: 'gcr.io/cloud-builders/gcloud'
-#   args: ['functions', 'deploy', 'sendOrderConfirmation', '--source=./functions/sendOrderConfirmation/', '--runtime=nodejs10', '--trigger-topic=payment-completion', '--env-vars-file=./extras/cloudbuild/functions_env_vars.yaml']
+- name: 'gcr.io/cloud-builders/gcloud'
+  args: ['functions', 'deploy', 'sendOrderConfirmation', '--source=./functions/sendOrderConfirmation/', '--runtime=nodejs10', '--trigger-topic=payment-completion', '--env-vars-file=./extras/cloudbuild/functions_env_vars.yaml']
 # Cloud Build Step #9: Deploy the Cloud Function for sending reminder emails
 # using SendGrid API.
 - name: 'gcr.io/cloud-builders/gcloud'
