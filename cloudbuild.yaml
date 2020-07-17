@@ -24,7 +24,7 @@ steps:
 - name: 'gcr.io/cloud-builders/gcs-fetcher'
   args:
   - '--type=Manifest'
-  - '--location=gs://${PROJECT_ID}-build/cloudbuild/gcsFetcherManifest.yaml'
+  - '--location=gs://${PROJECT_ID}-build/cloudbuild/gcsFetcherManifest.json'
 # Cloud Build Step #3: Deploy the App Engine app.
 - name: 'gcr.io/cloud-builders/gcloud'
   args: ['app', 'deploy', 'app/app.yaml']

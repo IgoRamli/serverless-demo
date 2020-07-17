@@ -16,10 +16,10 @@
 runtime: python37
 
 env_variables:
-  GCP_PROJECT: "intern-prj-1"
+  GCP_PROJECT: "intern-experiment"
   PUBSUB_TOPIC_NEW_PRODUCT: "new-product"
   PUBSUB_TOPIC_PAYMENT_PROCESS: "payment-process"
-  GCS_BUCKET: "serverless-store-demo-storage"
+  GCS_BUCKET: "intern-experiment-storage"
   FIREBASE_CONFIG: "firebase_config.json"
 
 handlers:
