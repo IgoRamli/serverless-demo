@@ -19,12 +19,14 @@ System tests.
 
 import os
 from unittest.mock import MagicMock
-
 import pytest
 
-TEST_UID = os.environ.get('TEST_UID')
-TEST_PRODUCT_ID = os.environ.get('TEST_PRODUCT_ID')
-TEST_PRODUCT_NAME = os.environ.get('TEST_PRODUCT_NAME')
+TEST_UID = 'TEST_UID'
+TEST_PRODUCT_ID = 'TEST_PRODUCT_ID'
+TEST_PRODUCT_NAME = 'TEST_PRODUCT_NAME'
+
+class Object(object):
+    pass
 
 
 @pytest.fixture
@@ -40,6 +42,18 @@ def client():
         'username': 'user',
         'email': 'user@example.com'
     }
+
+    # Mock cart
+    from helpers import carts, product_catalog
+    cart_obj = [Object()]
+    setattr (cart_obj[0], 'item_id', TEST_PRODUCT_ID)
+    carts.get_cart = MagicMock()
+    carts.get_cart.return_value = cart_obj
+
+    product_obj = Object()
+    setattr (product_obj, 'name', TEST_PRODUCT_NAME)
+    product_catalog.get_product = MagicMock()
+    product_catalog.get_product.return_value = product_obj
 
     import main
     main.app.testing = True
@@ -77,7 +91,7 @@ def test_checkout_single_product(client):
 
 def test_checkout_cart(client):
     """
-    Should display the checkout page (cart).
+    Should redirect back to product display (cart).
     """
     r = client.get('/checkout?from_cart=1')
     assert r.status_code == 200

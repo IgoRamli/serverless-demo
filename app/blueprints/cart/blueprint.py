@@ -42,6 +42,7 @@ def display(auth_context):
 
     cart = carts.get_cart(auth_context.get('uid'))
     for item in cart:
+        print (item)
         product = product_catalog.get_product(item.item_id)
         item.info = product
 

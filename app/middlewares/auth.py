@@ -74,6 +74,7 @@ def auth_required(f):
         return f(auth_context=auth_context, *args, **kwargs)
     return decorated
 
+
 def auth_optional(f):
     """
     A decorator for view functions where authentication is optional.

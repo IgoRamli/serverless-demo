@@ -39,8 +39,13 @@ def get_cart(uid):
        A list of CartItem.
     """
 
+    desc_dir = firestore.Query.DESCENDING
+
     cart = []
-    query_results = firestore_client.collection('carts').where('uid', '==', uid).order_by('modify_time', direction=firestore.Query.DESCENDING).get()
+    query_results = firestore_client.collection('carts')
+    query_results = query_results.where('uid', '==', uid)
+    query_results = query_results.order_by('modify_time', direction=desc_dir)
+    query_results = query_results.get()
     for result in query_results:
         item = CartItem.deserialize(result)
         cart.append(item)
@@ -83,9 +88,12 @@ def remove_from_cart(uid, item_id):
 
     @firestore.transactional
     def transactional_remove_from_cart(transaction, uid, item_id):
-        query_results = firestore_client.collection('carts').where('uid', '==', uid).where('item_id', '==', item_id).get()
+        query_results = firestore_client.collection('carts')
+        query_results = query_results.where('uid', '==', uid)
+        query_results = query_results.where('item_id', '==', item_id).get()
         for result in query_results:
-            reference = firestore_client.collection('carts').document(result.id)
+            collection = firestore_client.collection('carts')
+            reference = collection.document(result.id)
             transaction.delete(reference)
 
     transactional_remove_from_cart(transaction, uid, item_id)
