@@ -47,7 +47,6 @@ card.addEventListener('change', function (event) {
 });
 
 function stripePayButtonClicked () {
-  alert('Sending payments to Stripe')
   stripe.createToken(card).then(function (result) {
     if (result.error) {
       var errorElement = document.getElementById('card-errors');

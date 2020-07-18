@@ -43,8 +43,10 @@ def add_product(product):
     """
 
     product_id = uuid.uuid4().hex
-    firestore_client.collection('products').document(product_id).set(asdict(product))
+    document = firestore_client.collection('products').document(product_id)
+    document.set(asdict(product))
     return product_id
+
 
 def get_product(product_id):
     """
@@ -57,7 +59,8 @@ def get_product(product_id):
        A Product object.
     """
 
-    product = firestore_client.collection('products').document(product_id).get()
+    collections = firestore_client.collection('products')
+    product = collections.document(product_id).get()
     return Product.deserialize(product)
 
 
@@ -72,7 +75,8 @@ def list_products():
        A list of Product objects.
     """
 
-    products = firestore_client.collection('products').order_by('created_at').get()
+    col = firestore_client.collection('products').order_by('created_at')
+    products = col.get()
     product_list = [Product.deserialize(product) for product in list(products)]
     return product_list
 
@@ -107,8 +111,10 @@ def get_promos():
     """
 
     promos = []
-    query = firestore_client.collection('promos').where('label', '==', 'pets').where('score', '>=', 0.7)
-    query = query.order_by('score', direction=firestore.Query.DESCENDING).limit(3)
+    query = firestore_client.collection('promos')
+    query = query.where('label', '==', 'pets').where('score', '>=', 0.7)
+    query = query.order_by('score', direction=firestore.Query.DESCENDING)
+    query = query.limit(3)
     query_results = query.get()
     for result in query_results:
         entry = PromoEntry.deserialize(result)
