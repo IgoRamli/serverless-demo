@@ -95,7 +95,8 @@ def calculate_total_price(product_ids):
     total = 0
     for product_id in product_ids:
         product = get_product(product_id)
-        total += product.price
+        print(product)
+        total += int(product.price)
     return total
 
 
