@@ -23,12 +23,26 @@ import os
 import uuid
 
 from google.cloud import firestore
+import google.auth.credentials
 
 from .data_classes import Product, PromoEntry
 
 BUCKET = os.environ.get('GCS_BUCKET')
 
 firestore_client = firestore.Client()
+
+if not os.getenv('GAE_ENV', '').startswith('standard'):
+    # Connect to Firestore Emulator
+    import mock
+    print('Connecting to Firestore Emulator...')
+    os.environ["FIRESTORE_DATASET"] = "test"
+    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
+    os.environ["FIRESTORE_EMULATOR_HOST_PATH"] = "localhost:8080/firestore"
+    os.environ["FIRESTORE_HOST"] = "http://localhost:8080"
+    os.environ["FIRESTORE_PROJECT_ID"] = "test"
+
+    credentials = mock.Mock(spec=google.auth.credentials.Credentials)
+    firestore_client = firestore.Client(project="test", credentials=credentials)
 
 
 def add_product(product):
@@ -95,7 +109,6 @@ def calculate_total_price(product_ids):
     total = 0
     for product_id in product_ids:
         product = get_product(product_id)
-        print(product)
         total += int(product.price)
     return total
 

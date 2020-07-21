@@ -23,10 +23,23 @@ import json
 import time
 
 from google.cloud import pubsub_v1
+import google.auth.credentials
 
 publisher = pubsub_v1.PublisherClient()
 
+if not os.getenv('GAE_ENV', '').startswith('standard'):
+    # Connect to Firestore Emulator
+    import mock
+    print('Connecting to Pub/Sub Emulator...')
+    os.environ["PUBSUB_EMULATOR_HOST"] = "localhost:8085"
+    os.environ["PUBSUB_PROJECT_ID"] = "test"
+    os.environ["GCP_PROJECT"] = "test"
+
+    credentials = mock.Mock(spec=google.auth.credentials.Credentials)
+    publisher = pubsub_v1.PublisherClient(credentials=credentials)
+
 GCP_PROJECT = os.environ.get('GCP_PROJECT')
+
 
 def stream_event(topic_name, event_type, event_context):
     """

@@ -18,14 +18,31 @@ A collection of helper functions for cart related operations.
 """
 
 
+import os
+
 from dataclasses import asdict
 import time
+import mock
+from flask import current_app
 
 from google.cloud import firestore
+import google.auth.credentials
 
 from .data_classes import CartItem
 
 firestore_client = firestore.Client()
+    
+if not os.getenv('GAE_ENV', '').startswith('standard'):
+    # Connect to Firestore Emulator
+    print('Connecting to Firestore Emulator...')
+    os.environ["FIRESTORE_DATASET"] = "test"
+    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
+    os.environ["FIRESTORE_EMULATOR_HOST_PATH"] = "localhost:8080/firestore"
+    os.environ["FIRESTORE_HOST"] = "http://localhost:8080"
+    os.environ["FIRESTORE_PROJECT_ID"] = "test"
+
+    credentials = mock.Mock(spec=google.auth.credentials.Credentials)
+    firestore_client = firestore.Client(project="test", credentials=credentials)
 
 
 def get_cart(uid):
@@ -38,7 +55,6 @@ def get_cart(uid):
     Output:
        A list of CartItem.
     """
-
     cart = []
     query_results = firestore_client.collection('carts').where('uid', '==', uid).order_by('modify_time', direction=firestore.Query.DESCENDING).get()
     for result in query_results:
