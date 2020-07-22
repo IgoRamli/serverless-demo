@@ -7,3 +7,9 @@ package-lock.json
 .pytest_cache
 env
 .pyc
+
+# Coverages
+.coverage
+cov.xml
+
+*.log

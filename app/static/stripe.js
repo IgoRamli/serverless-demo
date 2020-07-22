@@ -15,42 +15,43 @@
 // Script for configuring Stripe.js.
 // See https://stripe.com/docs for more information.
 
-var stripe = Stripe('pk_test_51H4XF3CWiw901bJNClKRu3BWA7xycNDXSVipBZcGa6jhzd9zlsHxe40617oSqFIzeswgCSFiqE0scxXHM1GW5Tbo00D5KHjOrp');
+var stripe = Stripe(
+  "pk_test_51H4XF3CWiw901bJNClKRu3BWA7xycNDXSVipBZcGa6jhzd9zlsHxe40617oSqFIzeswgCSFiqE0scxXHM1GW5Tbo00D5KHjOrp"
+);
 var elements = stripe.elements();
 var style = {
   base: {
-    color: '#32325d',
-    lineHeight: '18px',
+    color: "#32325d",
+    lineHeight: "18px",
     fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-    fontSmoothing: 'antialiased',
-    fontSize: '16px',
-    '::placeholder': {
-      color: '#aab7c4'
-    }
+    fontSmoothing: "antialiased",
+    fontSize: "16px",
+    "::placeholder": {
+      color: "#aab7c4",
+    },
   },
   invalid: {
-    color: '#fa755a',
-    iconColor: '#fa755a'
-  }
+    color: "#fa755a",
+    iconColor: "#fa755a",
+  },
 };
 
-var card = elements.create('card', {style: style});
-card.mount('#card-element');
+var card = elements.create("card", { style: style });
+card.mount("#card-element");
 
-card.addEventListener('change', function (event) {
-  var displayError = document.getElementById('card-errors');
+card.addEventListener("change", function (event) {
+  var displayError = document.getElementById("card-errors");
   if (event.error) {
     displayError.textContent = event.error.message;
   } else {
-    displayError.textContent = '';
+    displayError.textContent = "";
   }
 });
 
-function stripePayButtonClicked () {
-  alert('Sending payments to Stripe')
+function stripePayButtonClicked() {
   stripe.createToken(card).then(function (result) {
     if (result.error) {
-      var errorElement = document.getElementById('card-errors');
+      var errorElement = document.getElementById("card-errors");
       errorElement.textContent = result.error.message;
     } else {
       stripeTokenHandler(result.token);
@@ -58,34 +59,36 @@ function stripePayButtonClicked () {
   });
 }
 
-function stripeTokenHandler (token) {
-  let addressA = document.getElementById('address_1_input').value;
-  let addressB = document.getElementById('address_2_input').value;
-  let city = document.getElementById('city_input').value;
-  let state = document.getElementById('state_input').value;
-  let zipCode = document.getElementById('zip_code_input').value;
-  let email = document.getElementById('email_input').value;
-  let mobile = document.getElementById('mobile_input').value;
+function stripeTokenHandler(token) {
+  let addressA = document.getElementById("address_1_input").value;
+  let addressB = document.getElementById("address_2_input").value;
+  let city = document.getElementById("city_input").value;
+  let state = document.getElementById("state_input").value;
+  let zipCode = document.getElementById("zip_code_input").value;
+  let email = document.getElementById("email_input").value;
+  let mobile = document.getElementById("mobile_input").value;
 
   if (!addressA || !city || !state || !zipCode || !email || !mobile) {
-    return alert(`Some fields might be empty or incorrect. Please make ` +
-                 `sure that all the required fields have been completed correctly.`);
+    return alert(
+      `Some fields might be empty or incorrect. Please make ` +
+        `sure that all the required fields have been completed correctly.`
+    );
   }
 
-  var paymentForm = document.getElementById('payment-form');
-  var hiddenInput = document.createElement('input');
-  hiddenInput.setAttribute('type', 'hidden');
-  hiddenInput.setAttribute('name', 'stripeToken');
-  hiddenInput.setAttribute('value', token.id);
+  var paymentForm = document.getElementById("payment-form");
+  var hiddenInput = document.createElement("input");
+  hiddenInput.setAttribute("type", "hidden");
+  hiddenInput.setAttribute("name", "stripeToken");
+  hiddenInput.setAttribute("value", token.id);
   paymentForm.appendChild(hiddenInput);
 
-  document.getElementById('address_1').value = addressA;
-  document.getElementById('address_2').value = addressB;
-  document.getElementById('city').value = city;
-  document.getElementById('state').value = state;
-  document.getElementById('zip_code').value = zipCode;
-  document.getElementById('email').value = email;
-  document.getElementById('mobile').value = mobile;
+  document.getElementById("address_1").value = addressA;
+  document.getElementById("address_2").value = addressB;
+  document.getElementById("city").value = city;
+  document.getElementById("state").value = state;
+  document.getElementById("zip_code").value = zipCode;
+  document.getElementById("email").value = email;
+  document.getElementById("mobile").value = mobile;
 
   paymentForm.submit();
 }

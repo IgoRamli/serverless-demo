@@ -13,9 +13,8 @@
 # limitations under the License.
 
 """
-System tests.
+Checkout Blueprint Tests
 """
-
 
 import os
 from unittest.mock import MagicMock
@@ -26,6 +25,8 @@ TEST_UID = os.environ.get('TEST_UID')
 TEST_PRODUCT_ID = os.environ.get('TEST_PRODUCT_ID')
 TEST_PRODUCT_NAME = os.environ.get('TEST_PRODUCT_NAME')
 
+class Object():
+    pass
 
 @pytest.fixture
 def client():
@@ -33,7 +34,8 @@ def client():
     Gets a Flask Test Client with authentication disabled.
     """
     # Disable auth
-    import middlewares.auth
+    import middlewares
+    from middlewares import auth
     middlewares.auth.verify_firebase_id_token = MagicMock()
     middlewares.auth.verify_firebase_id_token.return_value = {
         'uid': TEST_UID,
@@ -43,59 +45,39 @@ def client():
 
     import main
     main.app.testing = True
+    main.app.config['WTF_CSRF_ENABLED'] = False  # Disable CSRF to ease testing
     client = main.app.test_client()
     client.set_cookie('localhost', 'firebase_id_token', '*')
     return client
 
+def test_checkoutGet_withProductId_shouldReturn200(client):
+    import helpers
+    from helpers import product_catalog
+    product_catalog.get_product = MagicMock()
+    product_catalog.get_product.return_value = Object()
+    setattr(product_catalog.get_product.return_value, 'name', TEST_PRODUCT_NAME)
 
-def test_product_catalog(client):
-    """
-    Should display the product catalog page.
-    """
-    r = client.get('/')
+    r = client.get('/checkout?id=1')
+
     assert r.status_code == 200
-    assert 'Serverless Store' in str(r.data)
 
+def test_checkoutGet_withCartId_shouldreturn200(client):
+    import helpers
+    from helpers import carts, product_catalog
+    carts.get_cart = MagicMock()
+    carts.get_cart.return_value = [Object()]
+    setattr(carts.get_cart.return_value[0], 'item_id', TEST_PRODUCT_ID)
 
-def test_cart(client):
-    """
-    Should display the cart page.
-    """
-    r = client.get('/cart')
-    assert r.status_code == 200
-    assert 'Shopping Cart' in str(r.data)
+    product_catalog.get_product = MagicMock()
+    product_catalog.get_product.return_value = Object()
+    setattr(product_catalog.get_product.return_value, 'name', TEST_PRODUCT_NAME)
 
-
-def test_checkout_single_product(client):
-    """
-    Should display the checkout page (single item).
-    """
-    r = client.get(f'/checkout?id={TEST_PRODUCT_ID}')
-    assert r.status_code == 200
-    assert f'{TEST_PRODUCT_NAME}' in str(r.data)
-
-
-def test_checkout_cart(client):
-    """
-    Should display the checkout page (cart).
-    """
     r = client.get('/checkout?from_cart=1')
+
     assert r.status_code == 200
-    assert f'{TEST_PRODUCT_NAME}' in str(r.data)
 
+def test_checkoutGet_withoutParam_shouldRedirectToCatalogDisplay(client):
+    r = client.get('/checkout', follow_redirects=False)
 
-def test_sell(client):
-    """
-    Should display the sell page.
-    """
-    r = client.get('/sell')
-    assert r.status_code == 200
-    assert 'Join the marketplace' in str(r.data)
-
-
-def test_signin(client):
-    """
-    Should display the sell page.
-    """
-    r = client.get('/signin')
-    assert r.status_code == 200
+    assert r.status_code == 302
+    assert '\"/\"' in str(r.data)

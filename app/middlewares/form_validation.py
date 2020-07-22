@@ -20,6 +20,7 @@
 
 from functools import wraps
 
+from flask import request
 from flask_wtf import FlaskForm
 from wtforms import FieldList, FloatField, StringField
 from wtforms.validators import DataRequired, Optional
@@ -39,15 +40,15 @@ class CheckOutForm(FlaskForm):
     """
     FlaskForm for checking out items.
     """
-    product_ids = FieldList(StringField('product_id', validators=[DataRequired()]), min_entries=1)
-    address_1 = StringField('address_1', validators=[DataRequired()])
+    product_ids = FieldList(StringField('product_id', validators=[Optional()]), min_entries=1)
+    address_1 = StringField('address_1', validators=[DataRequired(message='addr_1')])
     address_2 = StringField('address_2', validators=[Optional()])
-    city = StringField('city', validators=[DataRequired()])
-    state = StringField('state', validators=[DataRequired()])
-    zip_code = StringField('zip_code', validators=[DataRequired()])
-    email = StringField('email', validators=[DataRequired()])
-    mobile = StringField('mobile', validators=[DataRequired()])
-    stripeToken = StringField('stripeToken', validators=[DataRequired()])
+    city = StringField('city', validators=[DataRequired(message='city')])
+    state = StringField('state', validators=[DataRequired(message='state')])
+    zip_code = StringField('zip_code', validators=[DataRequired(message='zip_code')])
+    email = StringField('email', validators=[DataRequired(message='email')])
+    mobile = StringField('mobile', validators=[DataRequired(message='mobile')])
+    stripeToken = StringField('stripeToken', validators=[DataRequired(message='stripeToken')])
 
 
 def sell_form_validation_required(f):
@@ -84,7 +85,7 @@ def checkout_form_validation_required(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        checkout_form = CheckOutForm()
+        checkout_form = CheckOutForm(request.form)
         if not checkout_form.validate():
             return 'Something does not look right. Check your input and try again.', 400
 

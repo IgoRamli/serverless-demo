@@ -18,14 +18,30 @@ A collection of helper functions for order related operations.
 """
 
 
+import os
 from dataclasses import asdict
 import uuid
 
 from google.cloud import firestore
+import google.auth.credentials
 
 from .data_classes import Order
 
-firestore = firestore.Client()
+firestore_client = firestore.Client()
+
+if not os.getenv('GAE_ENV', '').startswith('standard'):
+    # Connect to Firestore Emulator
+    import mock
+    print('Connecting to Firestore Emulator...')
+    os.environ["FIRESTORE_DATASET"] = "test"
+    os.environ["FIRESTORE_EMULATOR_HOST"] = "localhost:8080"
+    os.environ["FIRESTORE_EMULATOR_HOST_PATH"] = "localhost:8080/firestore"
+    os.environ["FIRESTORE_HOST"] = "http://localhost:8080"
+    os.environ["FIRESTORE_PROJECT_ID"] = "test"
+
+    credentials = mock.Mock(spec=google.auth.credentials.Credentials)
+    firestore_client = firestore.Client(project="test", credentials=credentials)
+
 
 def add_order(order):
     """
@@ -37,9 +53,8 @@ def add_order(order):
     Output:
        The ID of the order.
     """
-
     order_id = uuid.uuid4().hex
-    firestore.collection('orders').document(order_id).set(asdict(order))
+    firestore_client.collection('orders').document(order_id).set(asdict(order))
     return order_id
 
 
@@ -53,6 +68,5 @@ def get_order(order_id):
     Output:
        An Order object.
     """
-
-    order_data = firestore.collection('orders').document(order_id).get()
+    order_data = firestore_client.collection('orders').document(order_id).get()
     return Order.deserialize(order_data)
