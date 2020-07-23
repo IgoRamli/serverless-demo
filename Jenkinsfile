@@ -17,10 +17,11 @@ pipeline {
         stage('test') {
             steps {
                 // Install Node.js
-                sh 'apt-get update'
-                sh 'echo "Y" | apt-get install curl'
-                sh 'curl -sL https://deb.nodesource.com/setup_12.x | bash'
-                sh 'echo "Y" | apt-get install nodejs'
+                sh 'apt-get -y update'
+                sh 'apt-get -y install curl'
+                sh 'spcurl -sL https://deb.nodesource.com/setup_12.x | bash'
+                sh 'apt-get -y update'
+                sh 'apt-get -y install nodejs'
                 sh 'node -v'
                 sh 'npm -v'
 
