@@ -7,7 +7,8 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'apt-get install virtualenv'
+                sh 'sudo su -'
+                sh 'sudo apt-get install virtualenv'
                 sh 'virtualenv env'
                 sh 'source env/bin/activate'
                 sh 'pip install -r app/requirements.txt'
@@ -16,10 +17,10 @@ pipeline {
         stage('test') {
             steps {
                 // Install Node.js
-                sh 'apt-get update'
-                sh 'apt-get install curl'
+                sh 'sudo apt-get update'
+                sh 'sudo apt-get install curl'
                 sh 'curl -sL https://deb.nodesource.com/setup_8.x | bash'
-                sh 'apt-get install nodejs'
+                sh 'sudo apt-get install nodejs'
                 sh 'node -v'
                 sh 'npm -v'
 
