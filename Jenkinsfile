@@ -18,7 +18,7 @@ pipeline {
             steps {
                 // Install Node.js
                 sh 'apt-get update'
-                sh 'apt-get install curl'
+                sh 'echo "Y" | apt-get install curl'
                 sh 'curl -sL https://deb.nodesource.com/setup_8.x | bash'
                 sh 'apt-get install nodejs'
                 sh 'node -v'
