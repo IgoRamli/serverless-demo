@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
-                sh 'python3 -m venv env'
+                sh 'python -m venv env'
                 sh 'pip install --upgrade pip'
                 sh 'pip install -r app/requirements.txt'
             }
