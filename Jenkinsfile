@@ -7,6 +7,7 @@ pipeline {
     stages {
         stage('build') {
             steps {
+                sh 'apt-get install virtualenv'
                 sh 'virtualenv env'
                 sh 'source env/bin/activate'
                 sh 'pip install -r app/requirements.txt'
