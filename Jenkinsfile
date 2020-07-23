@@ -1,12 +1,14 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.8.2'
+            image 'python:3.5.1'
         }
     }
     stages {
         stage('build') {
             steps {
+                sh 'virtualenv env'
+                sh 'source env/bin/activate'
                 sh 'pip install -r app/requirements.txt'
             }
         }
