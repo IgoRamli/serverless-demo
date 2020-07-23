@@ -23,6 +23,7 @@ pipeline {
                 sh 'apt-get -y update'
                 sh 'apt-get -y install nodejs'
                 sh 'node -v'
+                sh 'npm install npm@latest -g'
                 sh 'npm -v'
 
                 // Install and run Firebase Emulator
