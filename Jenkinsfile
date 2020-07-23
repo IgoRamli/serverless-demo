@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.5.1'
+            image 'python:3.7-alpine3.11'
             args '--user=\"root\"'
         }
     }
