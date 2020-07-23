@@ -27,9 +27,11 @@ import google.auth.credentials
 
 from .data_classes import Product, PromoEntry
 
+PROJECT = os.environ.get('GCP_PROJECT')
+
 BUCKET = os.environ.get('GCS_BUCKET')
 
-firestore_client = firestore.Client()
+firestore_client = firestore.Client(project=PROJECT)
 
 if not os.getenv('GAE_ENV', '').startswith('standard'):
     # Connect to Firestore Emulator

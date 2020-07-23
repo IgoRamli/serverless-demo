@@ -30,7 +30,9 @@ import google.auth.credentials
 
 from .data_classes import CartItem
 
-firestore_client = firestore.Client()
+PROJECT = os.environ.get('GCP_PROJECT')
+
+firestore_client = firestore.Client(project=PROJECT)
     
 if not os.getenv('GAE_ENV', '').startswith('standard'):
     # Connect to Firestore Emulator

@@ -31,9 +31,10 @@ AUTOML_PROJECT = os.environ.get('AUTOML_PROJECT')
 if not AUTOML_PROJECT:
     AUTOML_PROJECT = os.environ.get('GCP_PROJECT')
 BUCKET = os.environ.get('GCS_BUCKET')
+PROJECT = os.environ.get('GCP_PROJECT')
 
 automl_predict_client = automl_v1beta1.PredictionServiceClient()
-firestore_client = firestore.Client()
+firestore_client = firestore.Client(project=PROJECT)
 storage_client = storage.Client()
 
 def automl(data, context):
