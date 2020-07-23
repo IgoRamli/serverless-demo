@@ -25,8 +25,10 @@ import os
 from google.cloud import firestore
 from google.cloud import vision
 
+PROJECT = os.environ.get('GCP_PROJECT')
+
 vision_client = vision.ImageAnnotatorClient()
-firestore_client = firestore.Client()
+firestore_client = firestore.Client(project=PROJECT)
 
 GCS_BUCKET = os.environ.get('GCS_BUCKET')
 

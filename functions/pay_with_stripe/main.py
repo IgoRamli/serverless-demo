@@ -34,7 +34,7 @@ API_KEY = os.environ.get('STRIPE_API_KEY')
 GCP_PROJECT = os.environ.get('GCP_PROJECT')
 PUBSUB_TOPIC_PAYMENT_COMPLETION = os.environ.get('PUBSUB_TOPIC_PAYMENT_COMPLETION')
 
-firestore = firestore.Client()
+firestore = firestore.Client(project=GCP_PROJECT)
 publisher = pubsub_v1.PublisherClient()
 sde = stackdriver_exporter.StackdriverExporter()
 stripe.api_key = API_KEY

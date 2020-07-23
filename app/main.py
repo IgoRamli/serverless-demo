@@ -21,7 +21,8 @@ This module is the main flask application.
 import firebase_admin
 from flask import Flask
 
-from blueprints import *
+from blueprints import cart_page, charge_page, checkout_page
+from blueprints import product_catalog_page, sell_page, signin_page
 
 
 # Initialize Firebase Admin SDK.
@@ -33,7 +34,7 @@ firebase = firebase_admin.initialize_app()
 # See https://cloud.google.com/debugger/docs/setup/python for more information.
 try:
     import googleclouddebugger
-    googleclouddebugger.enable()
+    # googleclouddebugger.enable()
 except ImportError:
     pass
 
