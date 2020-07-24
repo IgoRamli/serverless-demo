@@ -1,7 +1,7 @@
 pipeline {
     agent {
         docker {
-            image 'python:3.7-slim-buster'
+            image 'nikolaik/python-nodejs'
             args '--user=\"root\"'
         }
     }
@@ -16,23 +16,16 @@ pipeline {
         }
         stage('test') {
             steps {
-                // Install Node.js
-                sh 'apt-get -y update'
-                sh 'apt-get -y install curl'
-                sh 'curl -sL https://deb.nodesource.com/setup_12.x | bash'
-                sh 'apt-get -y update'
-                sh 'apt-get install nodejs-dev node-gyp libssl1.0-dev'
-                sh 'node -v'
-                sh 'apt-get install npm'
-                sh 'npm -v'
-
                 // Install and run Firebase Emulator
                 sh 'npm install -g firebase-tools'
+                sh 'firebase setup:emulators:firestore'
+                sh 'firebase setup:emulators:pubsub'
                 sh 'firebase emulators:start'
 
                 // Run tests
                 sh 'pip install pytest pytest-cov coverage'
-                sh 'pytest --cov-report term --cov=./app ./test'
+                sh 'SCRIPT="pytest --cov-report term --cov=./app ./test"'
+                sh 'firebase emulators:exec $SCRIPT'
             }
         }
     }
