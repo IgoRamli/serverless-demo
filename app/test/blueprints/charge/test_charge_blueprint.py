@@ -54,7 +54,7 @@ def test_chargePost_noCheckoutForm_shouldReturn400(client):
 
     assert r.status_code == 400
 
-def test_chargePost_withCheckoutFormValidation_shouldReturn400(client):
+def test_chargePost_withCheckoutFormValidation_shouldReturn200(client):
     import helpers
     from helpers import eventing, product_catalog
     product_catalog.calculate_total_price = MagicMock(return_value=0)
