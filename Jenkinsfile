@@ -8,6 +8,11 @@ pipeline {
     stages {
         stage('build') {
             steps {
+                // Install Java
+                sh 'apt-get -y update'
+                sh 'apt-get -y install default-jdk'
+                
+                // Install pip requirements
                 sh 'python --version'
                 sh 'python -m venv env'
                 sh 'pip install --upgrade pip'
@@ -20,12 +25,10 @@ pipeline {
                 sh 'npm install -g firebase-tools'
                 sh 'firebase setup:emulators:firestore'
                 sh 'firebase setup:emulators:pubsub'
-                sh 'firebase emulators:start'
 
                 // Run tests
                 sh 'pip install pytest pytest-cov coverage'
-                sh 'SCRIPT="pytest --cov-report term --cov=./app ./test"'
-                sh 'firebase emulators:exec $SCRIPT'
+                sh 'firebase emulators:exec --only=firestore,pubsub \"pytest --cov-report term --cov=./app ./app/test\"'
             }
         }
     }
