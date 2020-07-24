@@ -19,7 +19,7 @@ pipeline {
                 // Install Node.js
                 sh 'apt-get -y update'
                 sh 'apt-get -y install curl'
-                sh 'spcurl -sL https://deb.nodesource.com/setup_12.x | bash'
+                sh 'curl -sL https://deb.nodesource.com/setup_12.x | bash'
                 sh 'apt-get -y update'
                 sh 'apt-get -y install nodejs npm'
                 sh 'node -v'
