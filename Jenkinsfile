@@ -21,9 +21,9 @@ pipeline {
                 sh 'apt-get -y install curl'
                 sh 'curl -sL https://deb.nodesource.com/setup_12.x | bash'
                 sh 'apt-get -y update'
-                sh 'apt-get -y install nodejs npm node-gyp'
+                sh 'apt-get install nodejs-dev node-gyp libssl1.0-dev'
                 sh 'node -v'
-                sh 'npm install npm@latest -g'
+                sh 'apt-get install npm'
                 sh 'npm -v'
 
                 // Install and run Firebase Emulator
