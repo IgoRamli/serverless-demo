@@ -33,6 +33,9 @@ pipeline {
             agent {
                 label 'jenkins-deployer'
             }
+            when {
+                branch 'master'
+            }
             environment {
                 GCR_CREDENTIALS = credentials('docker-pusher')
             }
