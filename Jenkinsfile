@@ -1,12 +1,13 @@
 pipeline {
-    agent {
-        docker {
-            image 'nikolaik/python-nodejs'
-            args '--user=\"root\"'
-        }
-    }
+    agent none
     stages {
-        stage('build') {
+        stage('test') {
+            agent {
+                docker {
+                    image 'nikolaik/python-nodejs'
+                    args '--user=\"root\"'
+                }
+            }
             steps {
                 // Install Java
                 sh 'apt-get -y update'
@@ -17,10 +18,7 @@ pipeline {
                 sh 'python -m venv env'
                 sh 'pip install --upgrade pip'
                 sh 'pip install -r app/requirements.txt'
-            }
-        }
-        stage('test') {
-            steps {
+                
                 // Install and run Firebase Emulator
                 sh 'npm install -g firebase-tools'
                 sh 'firebase setup:emulators:firestore'
@@ -28,7 +26,25 @@ pipeline {
 
                 // Run tests
                 sh 'pip install pytest pytest-cov coverage'
-                sh 'firebase emulators:exec --only=firestore,pubsub \"pytest --cov-report term --cov=./app ./app/test\"'
+                sh 'firebase emulators:exec --only=firestore,pubsub "pytest --junit-xml=./build/reports.xml --cov=./app ./app/test"'
+            }
+        }
+        stage('dockerize') {
+            agent {
+                label 'jenkins-deployer'
+            }
+            environment {
+                GCR_CREDENTIALS = credentials('docker-pusher')
+            }
+            steps {
+                // Login with Service Account
+                sh "sudo gcloud auth activate-service-account jenkins-gcr-credentials@intern-experiment.iam.gserviceaccount.com --key-file=$GCR_CREDENTIALS"
+                sh 'echo "Y" | sudo gcloud auth configure-docker'
+                
+                // Build and submit docker
+                sh 'sudo docker build ./app -t monolith'
+                sh 'sudo docker tag monolith gcr.io/intern-experiment/monolith'
+                sh 'sudo docker push gcr.io/intern-experiment/monolith'
             }
         }
     }

@@ -13,3 +13,5 @@ env
 cov.xml
 
 *.log
+
+build/
