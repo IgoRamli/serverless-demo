@@ -50,20 +50,15 @@ def client():
 
     credentials = mock.Mock(spec=google.auth.credentials.Credentials)
     publisher = pubsub_v1.PublisherClient(credentials=credentials)
-    tear_down_pubsub(publisher)
     set_up_pubsub(publisher)
 
     return client
 
 
-def tear_down_pubsub(publisher):
-    name = publisher.topic_path('test', 'sample_topic')
-    publisher.delete_topic(name)
-
-
 def set_up_pubsub(publisher):
     name = publisher.topic_path('test', 'sample_topic')
     publisher.create_topic(name)
+
 
 def test_streamEvent_shouldPublishToPubSub(client):
     helpers.stream_event(
