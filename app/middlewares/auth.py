@@ -22,6 +22,14 @@ from functools import wraps
 from flask import redirect, request, url_for
 
 from firebase_admin import auth
+from firebase_admin.auth import ExpiredIdTokenError
+
+FIREBASE_ID_TOKEN = 'firebase_id_token'
+
+
+def loginAsAnonymous():
+    request.cookies.set(FIREBASE_ID_TOKEN, '')
+    return redirect(url_for('product_catalog_page.display'))
 
 
 def verify_firebase_id_token(token):
@@ -40,11 +48,14 @@ def verify_firebase_id_token(token):
         full_auth_context = auth.verify_id_token(token)
     except ValueError:
         return {}
+    except ExpiredIdTokenError:
+        return {}
 
     auth_context = {
         'username': full_auth_context.get('name'),
         'uid': full_auth_context.get('uid'),
-        'email': full_auth_context.get('email')
+        'email': full_auth_context.get('email'),
+        'expired': False
     }
     return auth_context
 
@@ -63,13 +74,13 @@ def auth_required(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
-        firebase_id_token = request.cookies.get('firebase_id_token')
+        firebase_id_token = request.cookies.get(FIREBASE_ID_TOKEN)
         if not firebase_id_token:
-            return redirect(url_for('product_catalog_page.display'))
+            return loginAsAnonymous()
 
         auth_context = verify_firebase_id_token(firebase_id_token)
         if not auth_context:
-            return redirect(url_for('product_catalog_page.display'))
+            return loginAsAnonymous()
 
         return f(auth_context=auth_context, *args, **kwargs)
     return decorated
