@@ -23,8 +23,8 @@ const SendGrid = require(`@sendgrid/mail`);
 
 const TIME_LIMIT = 7 * 24 * 3600;
 
-firebaseAdmin.initializeApp();
 const firestore = new Firestore();
+firebaseAdmin.initializeApp();
 SendGrid.setApiKey(process.env.SENDGRID_API_KEY);
 
 /* eslint-disable no-unused-vars */
@@ -35,7 +35,7 @@ exports.sendReminder = async (req, res) => {
     .collection(`carts`)
     .where(`modify_time`, "<=", Math.round(Date.now() / 1000) - TIME_LIMIT)
     .get();
-  queryResults.forEach(document => {
+  queryResults.forEach((document) => {
     var data = document.data();
     var cart = carts.get(data.uid);
     if (!cart) {
@@ -73,7 +73,7 @@ exports.sendReminder = async (req, res) => {
       to: to,
       from: from,
       subject: subject,
-      html: compile(cart)
+      html: compile(cart),
     });
   }
 };
