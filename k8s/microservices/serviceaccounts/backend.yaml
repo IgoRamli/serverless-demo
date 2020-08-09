@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: backend-sa
+  namespace: backend
+  annotations:
+    iam.gke.io/gcp-service-account: microservice-ba@intern-experiment.iam.gserviceaccount.com

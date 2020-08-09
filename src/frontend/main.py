@@ -18,16 +18,10 @@ This module is the main flask application.
 """
 
 
-import firebase_admin
 from flask import Flask
 
 from blueprints import cart_page, charge_page, checkout_page
 from blueprints import product_catalog_page, sell_page, signin_page
-
-
-# Initialize Firebase Admin SDK.
-# See https://firebase.google.com/docs/admin/setup for more information.
-firebase = firebase_admin.initialize_app()
 
 
 # Enable Google Cloud Debugger
