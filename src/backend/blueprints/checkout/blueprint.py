@@ -18,9 +18,11 @@ This module is the Flask blueprint for the checkout page (/checkout).
 """
 
 
+import logging
 import os
 
 from flask import Blueprint, render_template, request
+from flask_cors import CORS
 from opencensus.trace.tracer import Tracer
 from opencensus.trace.exporters import stackdriver_exporter
 
@@ -31,6 +33,7 @@ PUBSUB_TOPIC_PAYMENT_PROCESS = os.environ.get('PUBSUB_TOPIC_PAYMENT_PROCESS')
 sde = stackdriver_exporter.StackdriverExporter()
 
 checkout_page = Blueprint("checkout_page", __name__)
+CORS(checkout_page)
 
 def get_product_ids_from_cart(uid):
     product_ids = []
@@ -85,7 +88,8 @@ def create_order(product_ids, stripe_token, shipping):
                     'token': stripe_token,
                     # Pass the trace ID in the event so that Cloud Function
                     # pay_with_stripe can continue the trace.
-                    'trace_id': trace_id
+                    'trace_id': trace_id,
+                    'email': shipping.email
                 }
             )
 
@@ -98,6 +102,7 @@ def checkout_cart(uid):
         product_ids = get_product_ids_from_cart(uid)
         stripe_token = json['stripeToken']
 
+        logging.info(f"Checking out by cart with uid ({uid}) {json}")
         create_order(product_ids, stripe_token, shipping)
 
         return "Order successfully created!", 201
@@ -111,6 +116,7 @@ def checkout_product():
         product_ids = [ json['id'] ]
         stripe_token = json['stripeToken']
 
+        logging.info(f"Checking out by product {json}")
         create_order(product_ids, stripe_token, shipping)
 
         return "Order successfully created!", 201

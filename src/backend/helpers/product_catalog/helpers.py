@@ -20,6 +20,7 @@ A collection of helper functions for product related operations.
 
 from dataclasses import asdict
 import os
+import logging
 import uuid
 
 from google.cloud import firestore
@@ -108,6 +109,7 @@ def calculate_total_price(product_ids):
        The total price.
     """
 
+    logging.info(f"Calculating total price of {product_ids}")
     total = 0
     for product_id in product_ids:
         product = get_product(product_id)

@@ -19,13 +19,14 @@ This module is the Flask blueprint for the charge page (/charge).
 
 
 import os
+import logging
 import requests
 
 from flask import Blueprint, render_template, request, redirect, url_for
 from opencensus.trace.tracer import Tracer
 from opencensus.trace.exporters import stackdriver_exporter
 
-from helpers import eventing, product_catalog
+from helpers import product_catalog
 from middlewares.auth import auth_optional
 from middlewares.form_validation import checkout_form_validation_required
 
@@ -48,6 +49,10 @@ def generate_request_body(form):
         'mobile': form.mobile.data,
         'stripeToken': form.stripeToken.data,
     }
+
+    if (form.checkout_type.data == 'product'):
+        body.update({ 'id': form.product_id.data })
+
     return body
 
 
@@ -62,12 +67,13 @@ def process(auth_context, form):
     checkout_type = form.checkout_type.data
     if checkout_type == 'product':
         url = f"{BACKEND_URL}/checkout/product"
-        requests.post(url, json=generate_request_body(form))
-        return render_template("charge.html", auth_context=auth_context)
     elif checkout_type == 'cart':
         url = f"{BACKEND_URL}/checkout/{auth_context['uid']}/cart"
-        requests.post(url, json=generate_request_body(form))
-        return render_template("charge.html", auth_context=auth_context)
     else:
         return redirect(url_for('product_catalog_page.display'))
+
+    body = generate_request_body(form)
+    logging.info(f"Calling backend with body {body}")
+    requests.post(url, json=body)
+    return render_template("charge.html", auth_context=auth_context)
     

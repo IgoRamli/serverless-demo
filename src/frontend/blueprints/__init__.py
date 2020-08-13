@@ -13,6 +13,7 @@
 # limitations under the License.
 
 
+from .api import api_page
 from .cart import cart_page
 from .charge import charge_page
 from .checkout import checkout_page

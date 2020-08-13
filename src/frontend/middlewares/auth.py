@@ -19,7 +19,7 @@ This module includes decorators for authenticating requests.
 
 
 from functools import wraps
-from flask import redirect, request, url_for
+from flask import redirect, request, url_for, make_response
 
 from firebase_admin import auth
 from firebase_admin.auth import ExpiredIdTokenError
@@ -28,8 +28,9 @@ FIREBASE_ID_TOKEN = 'firebase_id_token'
 
 
 def loginAsAnonymous():
-    request.cookies.set(FIREBASE_ID_TOKEN, '')
-    return redirect(url_for('product_catalog_page.display'))
+    response = make_response(redirect(url_for('product_catalog_page.display')))
+    response.set_cookie(FIREBASE_ID_TOKEN, value='')
+    return response
 
 
 def verify_firebase_id_token(token):

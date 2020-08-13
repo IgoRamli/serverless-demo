@@ -51,13 +51,11 @@ def add_product(product):
 
     url = f"{BACKEND_URL}/products"
     product_dict = {
-        'id': product.get('document_id'),
-        'name': product.get('name'),
-        'description': product.get('description'),
-        'image': product.get('image'),
-        'labels': product.get('labels'),
-        'price': product.get('price'),
-        'created_at': product.get('created_at')
+        'name': product.name,
+        'description': product.description,
+        'image': product.image,
+        'labels': product.labels,
+        'price': product.price
     }
 
     result = requests.post(url, json=product_dict).text

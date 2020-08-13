@@ -18,19 +18,16 @@ var provider = new firebase.auth.GoogleAuthProvider();
 
 async function addToCartRequest(id, update, restore) {
   try {
-    let backendUrl = document.getElementById("backend_url").value;
     let uid = document.getElementById("uid").value;
-    let addToCartURL = `${backendUrl}/carts/${uid}`;
+    console.log(`Adding product '${id}'`);
+    let addToCartURL = `/api/carts/${uid}`;
     await fetch(addToCartURL, {
       method: "POST",
-      mode: "cors",
+      mode: "same-origin",
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
-      redirect: "error",
-      referrer: "no-referrer",
       body: JSON.stringify({ item_id: id }),
     });
     update();
@@ -66,16 +63,15 @@ function getCookie(name) {
 
 async function removeFromCartRequest(id, update, restore) {
   try {
-    let backendUrl = document.getElementById("backend_url").value;
     let uid = document.getElementById("uid").value;
-    let deleteFromCartURL = `${backendUrl}/carts/${uid}`;
-    await fetch(`${deleteFromCartURL}/${id}`, {
+    console.log(`Deleting product '${id}'`);
+    let deleteFromCartURL = `/api/carts/${uid}/${id}`;
+    await fetch(deleteFromCartURL, {
       method: "DELETE",
-      mode: "cors",
+      mode: "same-origin",
       cache: "no-cache",
       headers: {
         "Content-Type": "application/json",
-        "Access-Control-Allow-Origin": "*",
       },
       redirect: "error",
       referrer: "no-referrer",

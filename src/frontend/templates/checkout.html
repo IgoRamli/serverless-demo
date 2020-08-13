@@ -15,9 +15,9 @@
   </section>
   <form id="payment-form" action="/charge" method="POST">
     {{ form.csrf_token }}
-    {% for i in range(products|length) %}
-    <input type="hidden" id="product_id" name="product_ids-{{i}}" value="{{ products[i].id }}">
-    {% endfor %}
+    {% if product_id %}
+    <input type="hidden" id="product_id" name="product_id" value={{ product_id }}>
+    {% endif %}
     <input type="hidden" id="address_1" name="address_1" value="">
     <input type="hidden" id="address_2" name="address_2" value="">
     <input type="hidden" id="city" name="city" value="">

@@ -24,6 +24,17 @@ from flask_cors import CORS
 
 from blueprints import cart_page, product_catalog_page, checkout_page, promo_page
 
+import google.cloud.logging
+
+# Instantiates a client
+client = google.cloud.logging.Client()
+
+# Retrieves a Cloud Logging handler based on the environment
+# you're running in and integrates the handler with the
+# Python logging module. By default this captures all logs
+# at INFO level and higher
+client.get_default_handler()
+client.setup_logging()
 
 # Initialize Firebase Admin SDK.
 # See https://firebase.google.com/docs/admin/setup for more information.
@@ -40,7 +51,6 @@ except ImportError:
 
 
 app = Flask(__name__)
-CORS(app)
 app.secret_key = b'A Super Secret Key'
 
 
@@ -48,6 +58,8 @@ app.register_blueprint(cart_page)
 app.register_blueprint(checkout_page)
 app.register_blueprint(product_catalog_page)
 app.register_blueprint(promo_page)
+
+CORS(app)
 
 
 if __name__ == '__main__':

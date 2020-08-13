@@ -23,10 +23,12 @@ import time
 
 from flask import Blueprint, render_template, jsonify, request
 from flask.wrappers import Response
+from flask_cors import CORS
 
 from helpers import product_catalog
 
 promo_page = Blueprint('promo_page', __name__)
+CORS(promo_page)
 
 @promo_page.route('/promos', methods=['GET'])
 def get_promos():

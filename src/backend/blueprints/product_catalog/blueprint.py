@@ -18,15 +18,20 @@ This module is the Flask blueprint for the Product Catalog Service.
 """
 
 
+import os
 import json
 import time
 
 from flask import Blueprint, render_template, jsonify, request
 from flask.wrappers import Response
+from flask_cors import CORS
 
-from helpers import product_catalog
+from helpers import product_catalog, eventing
+
+PUBSUB_TOPIC_NEW_PRODUCT = os.environ.get('PUBSUB_TOPIC_NEW_PRODUCT')
 
 product_catalog_page = Blueprint('product_catalog_page', __name__)
+CORS(product_catalog_page)
 
 
 @product_catalog_page.route('/products', methods=['GET'])
@@ -70,6 +75,22 @@ def get_product_details(product_id):
         return Response(status=404)
 
 
+def publish_image(product_id, product_img):
+    # Publish an event to the topic for new products.
+    # Cloud Function detect_labels subscribes to the topic and labels the
+    # product using Cloud Vision API upon arrival of new events.
+    # Cloud Function streamEvents (or App Engine service stream-event)
+    # subscribes to the topic and saves the event to BigQuery for
+    # data analytics upon arrival of new events.
+    eventing.stream_event(
+        topic_name=PUBSUB_TOPIC_NEW_PRODUCT,
+        event_type='label_detection',
+        event_context={
+            'product_id': product_id,
+            'product_image': product_img
+        })
+
+
 @product_catalog_page.route('/products', methods=['POST'])
 def add_product():
     """
@@ -87,7 +108,11 @@ def add_product():
                 price=req['price'],
                 created_at=int(time.time())
             )
+
             product_id = product_catalog.add_product(product)
+            product_img = req['image']
+            publish_image(product_id, product_img)
+
             msg = {
                 'result': 'Product added successfully!',
                 'product_id': product_id

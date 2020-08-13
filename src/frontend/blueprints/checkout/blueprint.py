@@ -56,6 +56,13 @@ def display(auth_context):
         product = product_catalog.get_product(product_id)
         products.append(product)
         checkout_type = 'product'
+        return render_template('checkout.html',
+                               products=products,
+                               auth_context=auth_context,
+                               form=form,
+                               bucket=product_catalog.BUCKET,
+                               checkout_type=checkout_type,
+                               product_id=product_id)
     elif from_cart:
         uid = auth_context.get('uid')
         cart = carts.get_cart(uid)
@@ -63,8 +70,6 @@ def display(auth_context):
             product = product_catalog.get_product(item.item_id)
             products.append(product)
         checkout_type = 'cart'
-
-    if products:
         return render_template('checkout.html',
                                products=products,
                                auth_context=auth_context,

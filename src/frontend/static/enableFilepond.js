@@ -21,21 +21,24 @@ FilePond.setOptions({
   allowReplace: false,
   allowImagePreview: true,
   server: {
-    process: 'https://us-central1-digicon-demo.cloudfunctions.net/upload_image',
+    process:
+      "https://us-central1-intern-experiment.cloudfunctions.net/upload_image", // Change this based on cloud function address
     fetch: null,
     revert: null,
     restore: null,
-    load: null
-  }
+    load: null,
+  },
 });
-FilePond.registerPlugin(
-  FilePondPluginImagePreview
-);
+FilePond.registerPlugin(FilePondPluginImagePreview);
 const pond = FilePond.create(document.querySelector('input[type="file"]'));
-pond.on('processfile', (error, file) => {
+
+pond.on("addfile", () => {
+  pond.processFile();
+});
+pond.on("processfile", (error, file) => {
   if (error === null) {
     let id = file.serverId;
     let uploadFileIdInputNode = document.querySelector(`#image`);
     uploadFileIdInputNode.value = id;
   }
-})
+});

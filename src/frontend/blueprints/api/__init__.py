@@ -13,4 +13,4 @@
 # limitations under the License.
 
 
-from .helpers import *
+from .blueprint import api_page

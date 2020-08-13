@@ -18,10 +18,28 @@ This module is the main flask application.
 """
 
 
+import firebase_admin
 from flask import Flask
 
+from blueprints import api_page
 from blueprints import cart_page, charge_page, checkout_page
 from blueprints import product_catalog_page, sell_page, signin_page
+
+import google.cloud.logging
+
+# Instantiates a client
+client = google.cloud.logging.Client()
+
+# Retrieves a Cloud Logging handler based on the environment
+# you're running in and integrates the handler with the
+# Python logging module. By default this captures all logs
+# at INFO level and higher
+client.get_default_handler()
+client.setup_logging()
+
+# Initialize Firebase Admin SDK.
+# See https://firebase.google.com/docs/admin/setup for more information.
+firebase = firebase_admin.initialize_app()
 
 
 # Enable Google Cloud Debugger
@@ -37,6 +55,7 @@ app = Flask(__name__)
 app.secret_key = b'A Super Secret Key'
 
 
+app.register_blueprint(api_page)
 app.register_blueprint(cart_page)
 app.register_blueprint(charge_page)
 app.register_blueprint(checkout_page)

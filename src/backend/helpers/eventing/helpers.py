@@ -19,6 +19,7 @@ A collection of helper functions for streaming events.
 
 
 import os
+import logging
 import json
 import time
 
@@ -61,4 +62,5 @@ def stream_event(topic_name, event_type, event_context):
         'event_context': event_context
     }
     data = json.dumps(request).encode()
+    logging.info(f"Publishing {data} on topic {topic_path}")
     publisher.publish(topic_path, data)

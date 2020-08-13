@@ -40,7 +40,7 @@ class CheckOutForm(FlaskForm):
     """
     FlaskForm for checking out items.
     """
-    product_ids = FieldList(StringField('product_id', validators=[Optional()]), min_entries=1)
+    product_id = StringField('product_id', validators=[Optional()])
     address_1 = StringField('address_1', validators=[DataRequired(message='addr_1')])
     address_2 = StringField('address_2', validators=[Optional()])
     city = StringField('city', validators=[DataRequired(message='city')])
@@ -49,7 +49,7 @@ class CheckOutForm(FlaskForm):
     email = StringField('email', validators=[DataRequired(message='email')])
     mobile = StringField('mobile', validators=[DataRequired(message='mobile')])
     stripeToken = StringField('stripeToken', validators=[DataRequired(message='stripeToken')])
-    checkout_type = StringField('checkout_type')
+    checkout_type = StringField('checkout_type', validators=[DataRequired(message='checkout_type')])
 
 
 def sell_form_validation_required(f):

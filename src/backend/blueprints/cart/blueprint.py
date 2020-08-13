@@ -19,11 +19,13 @@ This module is the Flask blueprint for the cart page (/cart).
 
 
 from flask import Blueprint, render_template, request, jsonify
+from flask_cors import CORS
 
 from helpers import carts
 
 
 cart_page = Blueprint('cart_page', __name__)
+CORS(cart_page)
 
 
 @cart_page.route('/carts/<uid>', methods=['GET'])
