@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: service-ip
+  namespace: frontend
+data:
+  backend: "http://backend.backend.svc.cluster.local"

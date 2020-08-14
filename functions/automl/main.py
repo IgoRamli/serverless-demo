@@ -19,6 +19,7 @@ Cloud Function for performing AutoML Vision predictions.
 
 
 import base64
+import logging
 import json
 import os
 
@@ -41,8 +42,11 @@ def automl(data, context):
     if 'data' in data:
         request_json = base64.b64decode(data.get('data')).decode()
         request = json.loads(request_json)
-        product_id = request.get('event_context').get('product_id')
-        product_image = request.get('event_context').get('product_image')
+        payload = request.get('event_context')
+        product_id = payload.get('product_id')
+        product_image = payload.get('product_image')
+        
+        logging.info(f'Pushing image {payload} to AutoML for classification')
 
         bucket = storage_client.get_bucket(BUCKET)
         blob = bucket.blob(f'{product_image}.png')
