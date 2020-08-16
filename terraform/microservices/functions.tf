@@ -16,7 +16,7 @@
 
 resource "google_cloudfunctions_function" "cf_automl" {
   project     = var.project
-  region      = var.region
+  region      = var.cfunction_region
 
   name        = "automl"
   description = "Send product for processing by AutoML"
@@ -29,11 +29,15 @@ resource "google_cloudfunctions_function" "cf_automl" {
       event_type = "google.pubsub.topic.publish"
       resource   = google_pubsub_topic.new_product.id
   }
+  environment_variables = {
+      AUTOML_MODEL_ID = var.automl_model_id
+      GCS_BUCKET      = google_storage_bucket.product_image.name
+  }
 }
 
 resource "google_cloudfunctions_function" "cf_detect_labels" {
   project     = var.project
-  region      = var.region
+  region      = var.cfunction_region
 
   name        = "detect_labels"
   description = "Send product to Cloud Vision for label detection"
@@ -46,11 +50,14 @@ resource "google_cloudfunctions_function" "cf_detect_labels" {
       event_type = "google.pubsub.topic.publish"
       resource   = google_pubsub_topic.new_product.id
   }
+  environment_variables = {
+      GCS_BUCKET      = google_storage_bucket.product_image.name
+  }
 }
 
 resource "google_cloudfunctions_function" "cf_pay_with_stripe" {
   project     = var.project
-  region      = var.region
+  region      = var.cfunction_region
 
   name        = "pay_with_stripe"
   description = "Send payment request to Stripe"
@@ -63,11 +70,15 @@ resource "google_cloudfunctions_function" "cf_pay_with_stripe" {
       event_type = "google.pubsub.topic.publish"
       resource   = google_pubsub_topic.payment_process.id
   }
+  environment_variables = {
+    STRIPE_API_KEY                  = var.stripe_api_key
+    PUBSUB_TOPIC_PAYMENT_COMPLETION = google_pubsub_topic.payment_completion.name
+  }
 }
 
 resource "google_cloudfunctions_function" "cf_upload_image" {
   project     = var.project
-  region      = var.region
+  region      = var.cfunction_region
 
   name        = "upload_image"
   description = "Upload image to Cloud Storage"
@@ -77,6 +88,10 @@ resource "google_cloudfunctions_function" "cf_upload_image" {
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
   source_archive_object = google_storage_bucket_object.cfunctions_src["upload_image"].name
   trigger_http          = true
+
+  environment_variables = {
+      GCS_BUCKET      = google_storage_bucket.product_image.name
+  }
 }
 
 resource "google_cloudfunctions_function_iam_member" "cf_upload_image_invoker" {

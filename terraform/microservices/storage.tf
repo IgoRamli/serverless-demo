@@ -39,6 +39,16 @@ resource "google_storage_bucket" "storage_cfunctions" {
   force_destroy = true
 }
 
+# Storage bucket for storing generated config files
+resource "google_storage_bucket" "config" {
+  project     = var.project
+  name        = "${var.project}-config"
+  location    = var.region
+
+  # delete bucket and contents on destroy.
+  force_destroy = true
+}
+
 # Make image storage publicly available
 resource "google_storage_bucket_acl" "product_image_acl" {
   bucket          = google_storage_bucket.product_image.name

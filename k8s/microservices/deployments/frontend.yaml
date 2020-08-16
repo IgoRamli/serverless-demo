@@ -18,7 +18,7 @@ spec:
       serviceAccountName: frontend-sa
       containers:
         - name: frontend
-          image: gcr.io/intern-experiment/frontend:latest
+          image: gcr.io/intern-project-3/frontend
           ports:
             - containerPort: 80
           env:

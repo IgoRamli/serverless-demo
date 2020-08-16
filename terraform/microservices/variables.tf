@@ -27,3 +27,20 @@ variable "region" {
     type    = string
     default = "asia-east1"
 }
+
+variable "cfunction_region" {
+    type    = string
+    default = "us-central1"
+}
+
+variable "automl_model_id" {
+    type    = string
+}
+
+variable "stripe_api_key" {
+    type    = string
+}
+
+variable "sendgrid_api_key" {
+    type    = string
+}
