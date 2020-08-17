@@ -5,3 +5,4 @@ metadata:
   namespace: frontend
 data:
   backend: "http://backend.backend.svc.cluster.local"
+  frontend: "http://frontend.frontend.svc.cluster.local"

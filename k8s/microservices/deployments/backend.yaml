@@ -18,7 +18,7 @@ spec:
       serviceAccountName: backend-sa
       containers:
         - name: backend
-          image: gcr.io/intern-project-3/backend
+          image: gcr.io/intern-experiment/backend
           ports:
             - containerPort: 80
           env:

@@ -18,6 +18,7 @@
 # https://flask-wtf.readthedocs.io/en/stable/ for more information.
 
 
+import logging
 from functools import wraps
 
 from flask import request
@@ -86,6 +87,7 @@ def checkout_form_validation_required(f):
     """
     @wraps(f)
     def decorated(*args, **kwargs):
+        logging.info(f"Verifying CheckOutForm from {request.form}")
         checkout_form = CheckOutForm(request.form)
         if not checkout_form.validate():
             return 'Something does not look right. Check your input and try again.', 400
