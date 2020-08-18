@@ -15,6 +15,7 @@ spec:
       labels:
         app: loadgen
     spec:
+      serviceAccountName: loadgen-sa
       containers:
         - name: loadgen
           image: gcr.io/intern-experiment/loadgen
