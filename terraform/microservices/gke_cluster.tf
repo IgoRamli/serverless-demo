@@ -98,6 +98,16 @@ resource "kubernetes_service_account" "backend" {
     }
 }
 
+resource "kubernetes_service_account" "loadgen" {
+    metadata {
+        name      = "loadgen-sa"
+        namespace = kubernetes_namespace.frontend.metadata[0].name
+        annotations = {
+            "iam.gke.io/gcp-service-account" = google_service_account.loadgen.email
+        }
+    }
+}
+
 resource "kubernetes_config_map" "service_ip" {
   metadata {
     name      = "service-ip"
@@ -106,6 +116,7 @@ resource "kubernetes_config_map" "service_ip" {
 
   data = {
       backend = "http://${kubernetes_service.backend.metadata[0].name}.${kubernetes_namespace.backend.metadata[0].name}.svc.cluster.local"
+      frontend = "http://${kubernetes_service.frontend.metadata[0].name}.${kubernetes_namespace.frontend.metadata[0].name}.svc.cluster.local"
   }
 }
 
@@ -250,6 +261,72 @@ resource "kubernetes_deployment" "backend" {
                     env {
                         name  = "PORT"
                         value = "80"
+                    }
+
+                    resources {
+                        limits {
+                            cpu    = "0.5"
+                            memory = "512Mi"
+                        }
+                        requests {
+                            cpu    = "250m"
+                            memory = "50Mi"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+resource "kubernetes_deployment" "loadgen" {
+    metadata {
+        name      = "loadgen"
+        namespace = kubernetes_namespace.frontend.metadata[0].name
+        labels    = {
+            app = "loadgen"
+        }
+    }
+
+    spec {
+        replicas = 1
+
+        selector {
+            match_labels = {
+                app = "loadgen"
+            }
+        }
+
+        template {
+            metadata {
+                labels = {
+                    app = "loadgen"
+                }
+            }
+
+            spec {
+                service_account_name = kubernetes_service_account.loadgen.metadata[0].name
+                container {
+                    image = "gcr.io/${var.project}/loadgen"
+                    name  = "loadgen"
+
+                    env {
+                        name       = "BACKEND_URL"
+                        value_from {
+                            config_map_key_ref {
+                                name = kubernetes_config_map.service_ip.metadata[0].name
+                                key  = "backend"
+                            }
+                        }
+                    }
+                    env {
+                        name       = "FRONTEND_ADDR"
+                        value_from {
+                            config_map_key_ref {
+                                name = kubernetes_config_map.service_ip.metadata[0].name
+                                key  = "frontend"
+                            }
+                        }
                     }
 
                     resources {

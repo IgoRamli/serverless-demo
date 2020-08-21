@@ -1,4 +1,5 @@
 # serverless-demo
+
 Refactoring of Serverless Demo Application by Google
 
 ## How to Set Up
@@ -13,4 +14,5 @@ TODO: Revamp this guide!
 - Create Stripe account and write down the API Key.
 - Insert environment variables (AutoML model ID, Stripe API Token, GCS Bucket) in functions_env_vars.yaml
 - Run Terraform to generate the rest of resources.
+- Add IAM Policy Binding between Kubernetes Service Account and GCP Service Account (There are 3 pairs)
 - Add front end service's IP Address on Firebase Auth Authorized Domain

@@ -1,34 +1,35 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: frontend
+  name: loadgen
   namespace: frontend
   labels:
-    app: frontend
+    app: loadgen
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
-      app: frontend
+      app: loadgen
   template:
     metadata:
       labels:
-        app: frontend
+        app: loadgen
     spec:
-      serviceAccountName: frontend-sa
+      serviceAccountName: loadgen-sa
       containers:
-        - name: frontend
-          image: gcr.io/intern-experiment/frontend
-          ports:
-            - containerPort: 80
+        - name: loadgen
+          image: gcr.io/intern-experiment/loadgen
           env:
-            - name: PORT
-              value: "80"
             - name: BACKEND_URL
               valueFrom:
                 configMapKeyRef:
                   name: service-ip
                   key: backend
+            - name: FRONTEND_ADDR
+              valueFrom:
+                configMapKeyRef:
+                  name: service-ip
+                  key: frontend
           resources:
             requests:
               memory: "128Mi"

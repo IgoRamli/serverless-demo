@@ -16,26 +16,30 @@
 // See https://cloud.google.com/bigquery/streaming-data-into-bigquery for
 // more information.
 
-const {BigQuery} = require(`@google-cloud/bigquery`);
+const { BigQuery } = require(`@google-cloud/bigquery`);
 
-const DATASET = process.env.BIGQUERY_DATASET;
-const TABLE = process.env.BIGQUERY_TABLE;
+const DATASET = !process.env.BIGQUERY_DATASET
+  ? "sample-data"
+  : process.env.BIGQUERY_DATASET;
+const TABLE = !process.env.BIGQUERY_TABLE
+  ? "sample-table"
+  : process.env.BIGQUERY_TABLE;
 
 const bigquery = new BigQuery();
 const dataset = bigquery.dataset(DATASET);
 const table = dataset.table(TABLE);
 
 exports.streamEvents = async (req, res) => {
-    const messageString = Buffer.from(req.body.message.data, 'base64').toString();
-    const message = JSON.parse(messageString);
+  const messageString = Buffer.from(req.body.message.data, "base64").toString();
+  const message = JSON.parse(messageString);
 
-    try{
-        await table.insert({
-            eventType: message.event_type,
-            createdTime: message.created_time,
-            context: JSON.stringify(mesage.event_context)
-        })
-    } catch (error) {
-        console.log(error);
-    }
-}
+  try {
+    await table.insert({
+      eventType: message.event_type,
+      createdTime: message.created_time,
+      context: JSON.stringify(mesage.event_context),
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};

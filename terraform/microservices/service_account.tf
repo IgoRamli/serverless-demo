@@ -97,3 +97,15 @@ resource "google_project_iam_member" "jenkins_sa_user" {
   role      = "roles/iam.serviceAccountUser"
   member    = "serviceAccount:${google_service_account.jenkins.email}"
 }
+
+resource "google_service_account" "loadgen" {
+  project      = var.project
+  account_id   = "loadgen"
+  display_name = "loadgen"
+}
+
+resource "google_project_iam_member" "loadgen_firebase_admin" {
+  project   = var.project
+  role      = "roles/firebase.admin"
+  member    = "serviceAccount:${google_service_account.loadgen.email}"
+}
