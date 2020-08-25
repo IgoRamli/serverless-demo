@@ -215,3 +215,11 @@ Firebase Authentication restricts it's service to specific addresses only. In or
 Try to access your Serverless Store application by going to frontend's endpoint you get on step 10.
 
 If you can access the webpage without any problems, then congratulations! You have successfully set up your own Serverless Store application.
+
+## Topic Based Documentation
+
+This repository also integrates tools related to DevOps (Jenkins, Locust) and Data Science (BigQuery, Data Studio). Learn more about how this repository utilizes these tools here:
+
+- [Simulating User Traffic using Locust](docs/LoadGenerator.md)
+- [Continous Deployment using Jenkins](docs/ContinousIntegration.md)
+- [Extracting Insights using BigQuery and Data Studio](docs/BigQuery.md)

@@ -59,6 +59,7 @@ Inside a Kubernetes cluster, there exists multiple components, such as namespace
 
 - Make sure that you have kubectl installed by running `kubectl version`
 - Go to each deployment files (`deployments/frontend.yaml`, `deployments/backend.yaml`, `deployments/loadgen.yaml`), and change the image name to their appropriate location. It should be something like `gcr.io/YOUR_PROEJCT_NAME]/frontend`, `gcr.io/YOUR_PROJECT_NAME]/backend`, and `gcr.io/YOUR_PROEJCT_NAME]/loadgen`)
+- Connect your `kubectl` with your GKE cluster. This can be done by clicking **Connect** at your cluster in the Kubernetes Engine cluster list, and then run the given command in your local machine.
 - Run these commands in this folder (`/k8s/microservices`) and with the correct ordering:
   - `kubectl apply -f namespaces/frontend.yaml`
   - `kubectl apply -f namespaces/backend.yaml`
