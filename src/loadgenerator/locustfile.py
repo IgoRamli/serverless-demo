@@ -41,15 +41,18 @@ class WebsiteUser(HttpUser):
 
 
     def create_new_user(self):
-        user_id = ''.join(random.choices(ALPHABET, 64))
-        print(f"CREATING USER {user_id}")
-        user = auth.create_user(
-            email=f'user{user_id}@serverlessstore.com',
-            email_verified=False,
-            password='locustUser',
-            display_name=f'User {user_id} Rev. {rev_id}',
-            disabled=False
-        )
+        user_id = ''.join(random.choices(ALPHABET, k=64))
+        print(f"Creating user {user_id}")
+        try:
+            user = auth.create_user(
+                email=f'{user_id}@serverlessstore.com',
+                email_verified=False,
+                password='locustUser',
+                display_name=f'User {user_id}',
+                disabled=False
+            )
+        except:
+            print(f"Failed to create user {user_id}")
         self.USER_LIST.append(user.uid)
 
 
