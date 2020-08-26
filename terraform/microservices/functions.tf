@@ -76,6 +76,24 @@ resource "google_cloudfunctions_function" "cf_pay_with_stripe" {
   }
 }
 
+resource "google_cloudfunctions_function" "cf_streamEvents" {
+  project     = var.project
+  region      = var.cfunction_region
+
+  name        = "streamEvents"
+  description = "Record events to BigQuery"
+  runtime     = "nodejs10"
+
+  available_memory_mb   = 128
+  source_archive_bucket = google_storage_bucket.storage_cfunctions.name
+  source_archive_object = google_storage_bucket_object.cfunctions_src["streamEvents"].name
+  trigger_http          = true
+
+  environment_variables = {
+      GCS_BUCKET      = google_storage_bucket.product_image.name
+  }
+}
+
 resource "google_cloudfunctions_function" "cf_upload_image" {
   project     = var.project
   region      = var.cfunction_region
@@ -90,7 +108,8 @@ resource "google_cloudfunctions_function" "cf_upload_image" {
   trigger_http          = true
 
   environment_variables = {
-      GCS_BUCKET      = google_storage_bucket.product_image.name
+    BIGQUERY_DATASET = sample-data,
+    BIGQUERY_TABLE   = sample-table
   }
 }
 
