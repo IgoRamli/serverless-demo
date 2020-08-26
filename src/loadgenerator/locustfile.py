@@ -14,6 +14,7 @@ BACKEND_URL = os.environ.get("BACKEND_URL", "http://backend.backend.svc.cluster.
 FRONTEND_URL = os.environ.get("FRONTEND_ADDR", "http://frontend.frontend.svc.cluster.local")
 
 LOCALES = ['ar_EG', 'de_DE', 'el_GR', 'en_GB', 'en_AU', 'en_CA', 'en_IN', 'en_NZ', 'en_US', 'pt_BR', 'ru_RU', 'ja_JP', 'ko_KR', 'zh_CN', 'zh_TW']
+ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789abcdefghijklmnopqrstuvwxyz'
 
 rev_id = 27
 
@@ -40,10 +41,10 @@ class WebsiteUser(HttpUser):
 
 
     def create_new_user(self):
-        user_id = len(self.USER_LIST) + 1
-        print(f"CREATING USER {rev_id} - {user_id}")
+        user_id = ''.join(random.choices(ALPHABET, 64))
+        print(f"CREATING USER {user_id}")
         user = auth.create_user(
-            email=f'user{rev_id}-{user_id}@serverlessstore.com',
+            email=f'user{user_id}@serverlessstore.com',
             email_verified=False,
             password='locustUser',
             display_name=f'User {user_id} Rev. {rev_id}',
