@@ -18,6 +18,12 @@ For our development purpose, stage agents is a Virtual Machine that is provision
 
 Serverless Store's development pipeline contains two stages: `test` and `dockerize`. Testing stage will be run in a docker with Python and NodeJS pre-installed. Dockerize stage is the stage where docker images are built and pushed to GCR. Because `docker` requires a daemon to run, we will run a custom stage agent with custom machine image to build the docker image. This custom image will have GCloud SDK pre-installed, to make image pushing easier.
 
+## Architecture
+
+The diagram below visualize the process of Continous Integration with Jenkins. GitHub pushes it's repository changes to Jenkins, from which it will run two separate stages. The first unit testing stage runs on a Docker managed on Jenkins main agent. After all the tests run successfully, Jenkins deploy a stage agent that builds and pushes repository to GitHub. Jenkins will inform the build status to GitHub after all processes are completed.
+
+![architecture_jenkins](architecture_ci_cd.png)
+
 ## Setting Up Jenkins for Serverless Store
 
 Setting up Jenkins in a Google Cloud project is easy. GCP Deloyment Manager will automatically build a VM with Jenkins installed for you. Configuring Jenkins to run our pipeline, however, is a bit more tricky.
@@ -166,3 +172,5 @@ Jenkins's stage agent requires Java to run properly. Aside of that, your stage a
     - Check **Discard old items**
     - Days to keep old items : 1
 - Click **Save**
+
+After completing all of these steps, you should now have a fully automated Jenkins agent that listens for changes in your GitHub repository, builds and pushed Docker images to Google Container Registry.
