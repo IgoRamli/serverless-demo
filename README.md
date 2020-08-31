@@ -66,7 +66,7 @@ In order to use Firebase product for your own Serverless Store, you need to set 
   };
 ```
 
-- Download the `firebase-config.json` file for yout new app.
+- Download the `firebase_config.json` file for yout new app.
 - Place the configuration file from before into both your front end (`/src/frontend`) and back end (`/src/frontend`) folder.
 
 ### Step 2a: Setting up Firestore
