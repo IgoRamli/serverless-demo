@@ -220,6 +220,8 @@ If you can access the webpage without any problems, then congratulations! You ha
 
 This repository also integrates tools related to DevOps (Jenkins, Locust) and Data Science (BigQuery, Data Studio). Learn more about how this repository utilizes these tools here:
 
+- [Google Kubernetes Engine](k8s/README.md)
+- [Cloud Functions](functions/README.md)
 - [Simulating User Traffic using Locust](docs/LoadGenerator.md)
 - [Continous Deployment using Jenkins](docs/ContinousIntegration.md)
 - [Extracting Insights using BigQuery and Data Studio](docs/BigQuery.md)
