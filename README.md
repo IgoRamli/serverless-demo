@@ -4,21 +4,21 @@ This application is based on [this repository by Google™](https://github.com/G
 
 ## About this Application
 
-Serverless Store is a basic prototype of an e-commerce web application, utilizing various Google Cloud Platform product and several other third party applications. Oh this web app, user can both upload a product to be sold, and purchase a product from other users. For payments, Serverless Store connects to [Stripe](https://stripe.com/) and [SendGrid](https://sendgrid.com/) to process payments via credit card and send email confirmation to users, respectively.
+Serverless Store is a basic prototype of an e-commerce web application, utilizing various Google Cloud Platform product and several other third party applications. On this web app, user can both upload a product to be sold, and purchase a product from other users. For payments, Serverless Store connects to [Stripe](https://stripe.com/) and [SendGrid](https://sendgrid.com/) to process payments via credit card and send email confirmation to users, respectively.
 
-Serverless Store Web Application runs on Kubernetes (Google Kubernetes Engine). It consisted of two microservices that communicates internally using HTTP requests. There is also a load generator inside the Kubernetes cluster that simulates user activity.
+Serverless Store Web Application runs on Kubernetes (Google Kubernetes Engine). It consists of two microservices that communicates internally using HTTP requests. There is also a load generator inside the Kubernetes cluster that constantly simulates user activity.
 
-Outside the web application (and the Kubernetes engine), this application also uses several other GCP Products:
+Outside of the web application (and the Kubernetes engine), this application also uses several other GCP Solutions:
 
-| Products                | Usage                                                                                                                          |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Cloud Functions         | Performs event-driven jobs such as sending payments to Stripe, sending emails to customers, etc.                               |
-| Firebase Authentication | An OAuth2.0 based authentication service that allows users to login with various means (Email, Google Account, Facebook, etc.) |
-| Firestore Database      | NoSQL type database that stores user data                                                                                      |
-| Cloud AutoML            | Machine Learning service for custom image classification                                                                       |
-| Cloud Vision            | An image classification service that can label numerous store products accurately                                              |
-| Cloud Storage           | Cloud service for storing files anywhere                                                                                       |
-| Stackdriver Logging     | Cloud product that tracks program logs                                                                                         |
+| Products                | Usage                                                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Cloud Functions         | Performs event-driven jobs such as sending payments to Stripe, sending emails to customers, etc.                       |
+| Firebase Authentication | An OAuth2.0 based authentication service that allows users to login with various means (Email, Google, Facebook, etc.) |
+| Firestore Database      | NoSQL type database that stores user data                                                                              |
+| Cloud AutoML            | Machine Learning service for custom image classification                                                               |
+| Cloud Vision            | An image classification service that can label numerous store products accurately                                      |
+| Cloud Storage           | Cloud service for storing files anywhere                                                                               |
+| Stackdriver Logging     | Cloud product that tracks program logs                                                                                 |
 
 ## Architecture
 
