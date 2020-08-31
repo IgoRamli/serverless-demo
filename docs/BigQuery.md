@@ -33,7 +33,7 @@ Although our BigQuery database is created automatically by Terraform, we still n
 - Click **Install Extension**.
 - Wait until the installation is finished.
 
-After the installation is finished, go to BigQuery main page. You should see table `orders_raw_changelog` and view `orders_raw_latest` under dataset `sample_data`. If you wish to try out the real-time update feature of this extension, feel free to follow the tutorial given by Firebase when you click **Get Started** on the [Extensions Page](https://console.firebase.google.com/project/intern-experiment/extensions).
+After the installation is finished, go to BigQuery main page. You should see table `orders_raw_changelog` and view `orders_raw_latest` under dataset `sample_data`. If you wish to try out the real-time update feature of this extension, feel free to follow the tutorial given by Firebase when you click **Get Started** on the Extensions Page.
 
 ### Step 2: Backfill your Existing Collections
 

@@ -205,7 +205,7 @@ Firebase Authentication restricts it's service to specific addresses only. In or
 
 - Go to [Kubernetes Engine Service & Ingress](https://console.cloud.google.com/kubernetes/discovery).
 - Copy the front end's LoadBalancer endpoint.
-- Go to [Firebase Authentication Sign-In Method](https://console.firebase.google.com/u/0/project/intern-experiment/authentication/providers).
+- Go to [Firebase Authentication Sign-In Method] page by clicking **Authentication** on the main page navigation drawer.
 - Enable Google as a Sign-In Provider.
 - On the Authorized Domain list, click `Add Domain`.
 - Paste the endpoint as the domain name, then click `Add`.
