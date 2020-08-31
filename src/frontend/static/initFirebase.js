@@ -16,12 +16,12 @@
 // See https://firebase.google.com/docs/web/setup for more information.
 
 var config = {
-    apiKey: "AIzaSyAPwyFHSkeGDx9pKligLj0NsH0kc3ifwUQ",
-    authDomain: "intern-experiment.firebaseapp.com",
-    databaseURL: "https://intern-experiment.firebaseio.com",
-    projectId: "intern-experiment",
-    storageBucket: "intern-experiment.appspot.com",
-    messagingSenderId: "562693288084"
+  apiKey: "YOUR-API-KEY",
+  authDomain: "YOUR-AUTH-DOMAIN",
+  databaseURL: "YOUR-DATABASE-URL",
+  projectId: "YOUR-PROJECT-ID",
+  storageBucket: "YOUR-STORAGE-BUCKET",
+  messagingSenderId: "YOUR-MESSAGING-SENDER-ID",
 };
 
 firebase.initializeApp(config);
