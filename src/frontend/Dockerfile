@@ -3,8 +3,6 @@ FROM python:3
 ENV GAE_ENV standard
 
 ENV GCP_PROJECT intern-experiment
-ENV PUBSUB_TOPIC_NEW_PRODUCT new-product
-ENV PUBSUB_TOPIC_PAYMENT_PROCESS payment-process
 ENV GCS_BUCKET intern-experiment-storage
 ENV FIREBASE_CONFIG firebase_config.json
 

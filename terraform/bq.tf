@@ -15,15 +15,17 @@
  */
 
 resource "google_bigquery_dataset" "sample_data" {
-  dataset_id                  = "sample_data"
-  friendly_name               = "sample_data"
+  project                     = var.project
+  dataset_id                  = var.bq_dataset
+  friendly_name               = var.bq_dataset
   description                 = "Dataset that contains user events and it's analytical DBs"
   location                    = "asia-east1"
 }
 
 resource "google_bigquery_table" "sample_table" {
+  project    = var.project
   dataset_id = google_bigquery_dataset.sample_data.dataset_id
-  table_id   = "sample_table"
+  table_id   = var.bq_table
 
   schema = <<EOF
 [

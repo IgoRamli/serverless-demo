@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: backend
+  namespace: backend
+data:
+  project: "intern-experiment"
+  bucket: "intern-experiment-storage"
+  firebase-config: "firebase_config.json"
+  new-product: "new-product"
+  payment-process: "payment-process"

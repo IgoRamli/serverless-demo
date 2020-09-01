@@ -18,9 +18,10 @@ resource "google_cloudfunctions_function" "cf_automl" {
   project     = var.project
   region      = var.cfunction_region
 
-  name        = "automl"
+  name        = var.cf_automl_name
   description = "Send product for processing by AutoML"
   runtime     = "python37"
+  entry_point = "automl"
 
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
@@ -39,9 +40,10 @@ resource "google_cloudfunctions_function" "cf_detect_labels" {
   project     = var.project
   region      = var.cfunction_region
 
-  name        = "detect_labels"
+  name        = var.cf_detect_labels_name
   description = "Send product to Cloud Vision for label detection"
   runtime     = "python37"
+  entry_point = "detect_labels"
 
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
@@ -59,9 +61,10 @@ resource "google_cloudfunctions_function" "cf_pay_with_stripe" {
   project     = var.project
   region      = var.cfunction_region
 
-  name        = "pay_with_stripe"
+  name        = var.cf_pay_with_stripe_name
   description = "Send payment request to Stripe"
   runtime     = "python37"
+  entry_point = "pay_with_stripe"
 
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
@@ -80,9 +83,10 @@ resource "google_cloudfunctions_function" "cf_streamEvents" {
   project     = var.project
   region      = var.cfunction_region
 
-  name        = "streamEvents"
+  name        = var.cf_streamEvents_name
   description = "Record events to BigQuery"
   runtime     = "nodejs10"
+  entry_point = "streamEvents"
 
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
@@ -98,9 +102,10 @@ resource "google_cloudfunctions_function" "cf_upload_image" {
   project     = var.project
   region      = var.cfunction_region
 
-  name        = "upload_image"
+  name        = var.cf_upload_image_name
   description = "Upload image to Cloud Storage"
   runtime     = "python37"
+  entry_point = "upload_image"
 
   available_memory_mb   = 128
   source_archive_bucket = google_storage_bucket.storage_cfunctions.name
@@ -108,8 +113,8 @@ resource "google_cloudfunctions_function" "cf_upload_image" {
   trigger_http          = true
 
   environment_variables = {
-    BIGQUERY_DATASET = "sample-data",
-    BIGQUERY_TABLE   = "sample-table"
+    BIGQUERY_DATASET = var.bq_dataset,
+    BIGQUERY_TABLE   = var.bq_table
   }
 }
 

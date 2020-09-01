@@ -16,8 +16,8 @@
  
 resource "google_service_account" "microservice_ba" {
   project      = var.project
-  account_id   = "microservice-ba"
-  display_name = "microservice-ba"
+  account_id   = var.gsa_microservice_ba_id
+  display_name = var.gsa_microservice_ba_id
 }
 
 resource "google_project_iam_member" "trace_admin" {
@@ -46,8 +46,8 @@ resource "google_project_iam_member" "storage_object_viewer" {
 
 resource "google_service_account" "microservice_fr" {
   project      = var.project
-  account_id   = "microservice-fr"
-  display_name = "microservice-fr"
+  account_id   = var.gsa_microservice_fr_id
+  display_name = var.gsa_microservice_fr_id
 }
 
 resource "google_project_iam_member" "firebase_admin" {
@@ -70,8 +70,8 @@ resource "google_project_iam_member" "storage_object_admin" {
 
 resource "google_service_account" "jenkins" {
   project      = var.project
-  account_id   = "jenkins"
-  display_name = "jenkins"
+  account_id   = var.gsa_jenkins_id
+  display_name = var.gsa_jenkins_id
 }
 
 resource "google_project_iam_member" "jenkins_compute_instance_admin" {
@@ -100,8 +100,8 @@ resource "google_project_iam_member" "jenkins_sa_user" {
 
 resource "google_service_account" "jenkins_deployer" {
   project      = var.project
-  account_id   = "jenkins-deployer"
-  display_name = "jenkins-deployer"
+  account_id   = var.gsa_jenkins_deployer_id
+  display_name = var.gsa_jenkins_deployer_id
 }
 
 resource "google_project_iam_member" "jenkins_storage_object_admin" {
@@ -112,12 +112,39 @@ resource "google_project_iam_member" "jenkins_storage_object_admin" {
 
 resource "google_service_account" "loadgen" {
   project      = var.project
-  account_id   = "loadgen"
-  display_name = "loadgen"
+  account_id   = var.gsa_microservice_lg_id
+  display_name = var.gsa_microservice_lg_id
 }
 
 resource "google_project_iam_member" "loadgen_firebase_admin" {
   project   = var.project
   role      = "roles/firebase.admin"
   member    = "serviceAccount:${google_service_account.loadgen.email}"
+}
+
+resource "google_service_account_iam_binding" "backend" {
+  service_account_id = google_service_account.microservice_ba.name
+  role = "roles/iam.workloadIdentityUser"
+
+  members = [
+    "serviceAccount:${var.project}.svc.id.goog[${kubernetes_service_account.backend.metadata[0].namespace}/${kubernetes_service_account.backend.metadata[0].name}]",
+  ]
+}
+
+resource "google_service_account_iam_binding" "frontend" {
+  service_account_id = google_service_account.microservice_fr.name
+  role = "roles/iam.workloadIdentityUser"
+
+  members = [
+    "serviceAccount:${var.project}.svc.id.goog[${kubernetes_service_account.frontend.metadata[0].namespace}/${kubernetes_service_account.frontend.metadata[0].name}]",
+  ]
+}
+
+resource "google_service_account_iam_binding" "loadgen" {
+  service_account_id = google_service_account.loadgen.name
+  role = "roles/iam.workloadIdentityUser"
+
+  members = [
+    "serviceAccount:${var.project}.svc.id.goog[${kubernetes_service_account.loadgen.metadata[0].namespace}/${kubernetes_service_account.loadgen.metadata[0].name}]",
+  ]
 }

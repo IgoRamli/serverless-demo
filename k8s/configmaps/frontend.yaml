@@ -1,0 +1,9 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend
+  namespace: frontend
+data:
+  project: "intern-experiment"
+  bucket: "intern-experiment-storage"
+  firebase-config: "firebase_config.json"

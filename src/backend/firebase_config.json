@@ -1,0 +1,8 @@
+{
+  "apiKey": "AIzaSyAPwyFHSkeGDx9pKligLj0NsH0kc3ifwUQ",
+  "authDomain": "intern-experiment.firebaseapp.com",
+  "databaseURL": "https://intern-experiment.firebaseio.com",
+  "projectId": "intern-experiment",
+  "storageBucket": "intern-experiment.appspot.com",
+  "messagingSenderId": "562693288084"
+}

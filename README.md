@@ -22,7 +22,7 @@ Outside of the web application (and the Kubernetes engine), this application als
 
 ## Architecture
 
-Serverless Store runs on sever interconnecting products and components. The diagram below visualizes the relationship between those components:
+Serverless Store runs on several interconnecting products and components. The diagram below visualizes the relationship between those components:
 
 ![architecture_general](docs/architecture_general_v1.png)
 
@@ -30,10 +30,7 @@ Serverless Store runs on sever interconnecting products and components. The diag
 
 Serverless Store is created in a way that can be easily set up and tear down as soon as the developer have a GCP Project with billing enabled.
 
-- Add IAM Policy Binding between Kubernetes Service Account and GCP Service Account (There are 3 pairs)
-- Add front end service's IP Address on Firebase Auth Authorized Domain
-
-Before running this set-up guide, please make sure that you have all of the following:
+Before running this set-up guide, please make sure that you have the following:
 
 - A Google Cloud Platform project with billing enabled.
 - An account with owner as a role on the project mentioned before.
@@ -43,8 +40,8 @@ Before running this set-up guide, please make sure that you have all of the foll
 
 In order to use Firebase product for your own Serverless Store, you need to set a Firebase Project for your GCP project.
 
-- Go to [Firebase Console](https://console.firebase.google.com)
-- Click "Add project" card on the Web UI
+- Go to [Firebase Console](https://console.firebase.google.com).
+- Click "Add project" card on the Web UI.
 - On the first step of project creation, select your GCP Project, and click next.
 - You will be given a reminder on the effects of adding Firebase to a Google Cloud Project. Select **Continue**.
 - Turn off the "Enable Google Analytics for this project" switch and click **Add Firebase**.
@@ -188,16 +185,6 @@ The remaining components (Pub/Sub, Cloud Functions, Service Accounts, GKE, Cloud
 - Run `terraform apply`.
 - Fill out your GCP project name, AutoML model ID created on step 4, and Stripe API Token created on step 3 when prompted.
 - Type `yes` when prompted, and wait until Terraform finish createing the remaining components. This may take 5-10 minutes.
-
-### Step 9: Connect your Google Service Account to Kubernetes Service Account
-
-Each microservice module deployed on your Kubernetes cluster requires specific permission to run properly (e.g. Reading Cloud Storage objects requires `Cloud Storage Viewer` role). This roles is already defined in your Terraform-generated Google Service Account. However, Kubernetes deployment uses Kubernetes Service Account for authorization. Therefore, you will need to link your GSA to KSA.
-
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[frontend/frontend-sa]" microservice-fr@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your front end GSA (microservice-fr) to your front end's KSA (frontend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[backend/backend-sa]" microservice-ba@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your back end GSA (microservice-ba) to your back end's KSA (backend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[loadgen/loadgen-sa]" loadgen@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your load generator GSA (loadgen) to your load generator's KSA (loadgen-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-
-For more information on using Workload Identity, refer to [this documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
 
 ### Step 10: Add your Kubernetes Load Balancer to authorized domain list
 

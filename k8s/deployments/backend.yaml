@@ -38,6 +38,31 @@ spec:
           env:
             - name: PORT
               value: "80"
+            - name: GCP_PROJECT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend
+                  key: project
+            - name: GCS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: backend
+                  key: bucket
+            - name: FIREBASE_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: backend
+                  key: firebase-config
+            - name: PUBSUB_TOPIC_NEW_PRODUCT
+              valueFrom:
+                configMapKeyRef:
+                  name: backend
+                  key: new-product
+            - name: PUBSUB_TOPIC_PAYMENT_PROCESS
+              valueFrom:
+                configMapKeyRef:
+                  name: backend
+                  key: payment-process
           resources:
             requests:
               memory: "128Mi"

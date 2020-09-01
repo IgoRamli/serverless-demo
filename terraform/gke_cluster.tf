@@ -19,7 +19,7 @@ data "google_client_config" "provider" {}
 resource "google_container_cluster" "microservices" {
   project               = var.project
   provider              = google-beta.gb3
-  name                  = "microservices"
+  name                  = var.gke_cluster_name
   location              = var.location
   initial_node_count    = 3
 
@@ -68,19 +68,19 @@ provider "kubernetes" {
 
 resource "kubernetes_namespace" "frontend" {
     metadata {
-        name = "frontend"
+        name = var.gke_namespace_frontend_name
     }
 }
 resource "kubernetes_namespace" "backend" {
     metadata {
-        name = "backend"
+        name = var.gke_namespace_backend_name
     }
 }
 
 
 resource "kubernetes_service_account" "frontend" {
     metadata {
-        name      = "frontend-sa"
+        name      = var.gke_sa_frontend_name
         namespace = kubernetes_namespace.frontend.metadata[0].name
         annotations = {
             "iam.gke.io/gcp-service-account" = google_service_account.microservice_fr.email
@@ -90,7 +90,7 @@ resource "kubernetes_service_account" "frontend" {
 
 resource "kubernetes_service_account" "backend" {
     metadata {
-        name      = "backend-sa"
+        name      = var.gke_sa_backend_name
         namespace = kubernetes_namespace.backend.metadata[0].name
         annotations = {
             "iam.gke.io/gcp-service-account" = google_service_account.microservice_ba.email
@@ -100,247 +100,10 @@ resource "kubernetes_service_account" "backend" {
 
 resource "kubernetes_service_account" "loadgen" {
     metadata {
-        name      = "loadgen-sa"
+        name      = var.gke_sa_loadgen_name
         namespace = kubernetes_namespace.frontend.metadata[0].name
         annotations = {
             "iam.gke.io/gcp-service-account" = google_service_account.loadgen.email
-        }
-    }
-}
-
-resource "kubernetes_config_map" "service_ip" {
-  metadata {
-    name      = "service-ip"
-    namespace = kubernetes_namespace.frontend.metadata[0].name
-  }
-
-  data = {
-      backend = "http://backend.${kubernetes_namespace.backend.metadata[0].name}.svc.cluster.local"
-      frontend = "http://frontend.${kubernetes_namespace.frontend.metadata[0].name}.svc.cluster.local"
-  }
-}
-
-resource "kubernetes_service" "frontend" {
-    metadata {
-        name      = "frontend"
-        namespace = kubernetes_namespace.frontend.metadata[0].name
-    }
-    spec {
-        selector = {
-            app = "${kubernetes_deployment.frontend.metadata.0.labels.app}"
-        }
-        port {
-            protocol    = "TCP"
-            port        = 80
-            target_port = 80
-        }
-
-        type = "LoadBalancer"
-    }
-}
-
-resource "kubernetes_service" "backend" {
-    metadata {
-        name      = "backend"
-        namespace = kubernetes_namespace.backend.metadata[0].name
-    }
-    spec {
-        selector = {
-            app = "${kubernetes_deployment.backend.metadata.0.labels.app}"
-        }
-        port {
-            protocol    = "TCP"
-            port        = 80
-            target_port = 80
-        }
-
-        type = "ClusterIP"
-    }
-}
-
-resource "kubernetes_deployment" "frontend" {
-    metadata {
-        name      = "frontend"
-        namespace = kubernetes_namespace.frontend.metadata[0].name
-        labels    = {
-            app = "frontend"
-        }
-    }
-
-    spec {
-        replicas = 2
-
-        selector {
-            match_labels = {
-                app = "frontend"
-            }
-        }
-
-        template {
-            metadata {
-                labels = {
-                    app = "frontend"
-                }
-            }
-
-            spec {
-                service_account_name = kubernetes_service_account.frontend.metadata[0].name
-                container {
-                    image = "gcr.io/${var.project}/frontend"
-                    name  = "example"
-
-                    port {
-                        container_port = "80"
-                    }
-
-                    env {
-                        name  = "PORT"
-                        value = "80"
-                    }
-                    env {
-                        name       = "BACKEND_URL"
-                        value_from {
-                            config_map_key_ref {
-                                name = kubernetes_config_map.service_ip.metadata[0].name
-                                key  = "backend"
-                            }
-                        }
-                    }
-
-                    resources {
-                        limits {
-                            cpu    = "0.5"
-                            memory = "512Mi"
-                        }
-                        requests {
-                            cpu    = "250m"
-                            memory = "50Mi"
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-resource "kubernetes_deployment" "backend" {
-    metadata {
-        name      = "backend"
-        namespace = kubernetes_namespace.backend.metadata[0].name
-        labels    = {
-            app = "backend"
-        }
-    }
-
-    spec {
-        replicas = 3
-
-        selector {
-            match_labels = {
-                app = "backend"
-            }
-        }
-
-        template {
-            metadata {
-                labels = {
-                    app = "backend"
-                }
-            }
-
-            spec {
-                service_account_name = kubernetes_service_account.backend.metadata[0].name
-                container {
-                    image = "gcr.io/${var.project}/backend"
-                    name  = "backend"
-
-                    port {
-                        container_port = "80"
-                    }
-
-                    env {
-                        name  = "PORT"
-                        value = "80"
-                    }
-
-                    resources {
-                        limits {
-                            cpu    = "0.5"
-                            memory = "512Mi"
-                        }
-                        requests {
-                            cpu    = "250m"
-                            memory = "50Mi"
-                        }
-                    }
-                }
-            }
-        }
-    }
-}
-
-resource "kubernetes_deployment" "loadgen" {
-    metadata {
-        name      = "loadgen"
-        namespace = kubernetes_namespace.frontend.metadata[0].name
-        labels    = {
-            app = "loadgen"
-        }
-    }
-
-    spec {
-        replicas = 1
-
-        selector {
-            match_labels = {
-                app = "loadgen"
-            }
-        }
-
-        template {
-            metadata {
-                labels = {
-                    app = "loadgen"
-                }
-            }
-
-            spec {
-                service_account_name = kubernetes_service_account.loadgen.metadata[0].name
-                container {
-                    image = "gcr.io/${var.project}/loadgen"
-                    name  = "loadgen"
-
-                    env {
-                        name       = "BACKEND_URL"
-                        value_from {
-                            config_map_key_ref {
-                                name = kubernetes_config_map.service_ip.metadata[0].name
-                                key  = "backend"
-                            }
-                        }
-                    }
-                    env {
-                        name       = "FRONTEND_ADDR"
-                        value_from {
-                            config_map_key_ref {
-                                name = kubernetes_config_map.service_ip.metadata[0].name
-                                key  = "frontend"
-                            }
-                        }
-                    }
-
-                    resources {
-                        limits {
-                            cpu    = "0.5"
-                            memory = "512Mi"
-                        }
-                        requests {
-                            cpu    = "250m"
-                            memory = "50Mi"
-                        }
-                    }
-                }
-            }
         }
     }
 }

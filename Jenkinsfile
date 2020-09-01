@@ -27,7 +27,7 @@ pipeline {
                     }
                     steps {
                         // Login with Service Account
-                        sh "sudo gcloud auth activate-service-account jenkins-gcr-credentials@intern-experiment.iam.gserviceaccount.com --key-file=$GCR_CREDENTIALS"
+                        sh "sudo gcloud auth activate-service-account jenkins-deployer-test@intern-experiment.iam.gserviceaccount.com --key-file=$GCR_CREDENTIALS"
                         sh 'echo "Y" | sudo gcloud auth configure-docker'
                         // Build and submit docker
                         sh 'sudo docker build ./src/frontend -t frontend'
@@ -47,7 +47,7 @@ pipeline {
                     }
                     steps {
                         // Login with Service Account
-                        sh "sudo gcloud auth activate-service-account jenkins-gcr-credentials@intern-experiment.iam.gserviceaccount.com --key-file=$GCR_CREDENTIALS"
+                        sh "sudo gcloud auth activate-service-account jenkins-deployer-test@intern-experiment.iam.gserviceaccount.com --key-file=$GCR_CREDENTIALS"
                         sh 'echo "Y" | sudo gcloud auth configure-docker'
                         // Build and submit docker
                         sh 'sudo docker build ./src/backend -t backend'

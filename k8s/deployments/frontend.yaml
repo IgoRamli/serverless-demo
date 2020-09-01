@@ -43,6 +43,21 @@ spec:
                 configMapKeyRef:
                   name: service-ip
                   key: backend
+            - name: GCP_PROJECT
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend
+                  key: project
+            - name: GCS_BUCKET
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend
+                  key: bucket
+            - name: FIREBASE_CONFIG
+              valueFrom:
+                configMapKeyRef:
+                  name: frontend
+                  key: firebase-config
           resources:
             requests:
               memory: "128Mi"

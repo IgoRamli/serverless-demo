@@ -16,15 +16,15 @@
 
 resource "google_pubsub_topic" "new_product" {
   project = var.project
-  name    = "new-product"
+  name    = var.pubsub_topic_new_product_name
 }
 
 resource "google_pubsub_topic" "payment_process" {
   project = var.project
-  name    = "payment-process"
+  name    = var.pubsub_topic_payment_process_name
 }
 
 resource "google_pubsub_topic" "payment_completion" {
   project = var.project
-  name    = "payment-completion"
+  name    = var.pubsub_topic_payment_completion_name
 }

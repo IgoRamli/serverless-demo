@@ -78,4 +78,10 @@ Inside a Kubernetes cluster, there exists multiple components, such as namespace
 
 ### Step 4: Connect your Google Service Account to your Kubernetes Service Account
 
-Since Google Service Account and Kubernetes Service Account are different entities, you need to add an IAM Policy Binding to both of them. This is covered in step 9 of the main set-up.
+Each microservice module deployed on your Kubernetes cluster requires specific permission to run properly (e.g. Reading Cloud Storage objects requires `Cloud Storage Viewer` role). These roles are defined using Google Service Account. However, Kubernetes deployment uses Kubernetes Service Account for authorization. Therefore, you will need to link your GSA to KSA.
+
+- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[frontend/frontend-sa]" microservice-fr@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your front end GSA (microservice-fr) to your front end's KSA (frontend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
+- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[backend/backend-sa]" microservice-ba@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your back end GSA (microservice-ba) to your back end's KSA (backend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
+- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[loadgen/loadgen-sa]" loadgen@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your load generator GSA (loadgen) to your load generator's KSA (loadgen-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
+
+For more information on using Workload Identity, refer to [this documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).

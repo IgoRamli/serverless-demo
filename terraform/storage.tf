@@ -22,7 +22,7 @@ provider "google-beta" {
 # Storage bucket for storing product images
 resource "google_storage_bucket" "product_image" {
   project     = var.project
-  name        = "${var.project}-storage"
+  name        = "${var.project}-${var.gcs_product_image_suffix}"
   location    = var.region
 
   # delete bucket and contents on destroy.
@@ -32,7 +32,7 @@ resource "google_storage_bucket" "product_image" {
 # Storage bucket for storing Cloud Function's source code
 resource "google_storage_bucket" "storage_cfunctions" {
   project     = var.project
-  name        = "${var.project}-cfunctions"
+  name        = "${var.project}-${var.gcs_cfunctions_suffix}"
   location    = var.region
 
   # delete bucket and contents on destroy.
@@ -42,7 +42,7 @@ resource "google_storage_bucket" "storage_cfunctions" {
 # Storage bucket for storing generated config files
 resource "google_storage_bucket" "config" {
   project     = var.project
-  name        = "${var.project}-config"
+  name        = "${var.project}-${var.gcs_config_suffix}"
   location    = var.region
 
   # delete bucket and contents on destroy.
