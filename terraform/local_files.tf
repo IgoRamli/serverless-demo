@@ -27,31 +27,18 @@ data "template_file" "function_env_vars" {
 
 resource "local_file" "function_env_vars" {
     content  = data.template_file.function_env_vars.rendered
-    filename = "${path.module}/../../extras/cloudbuild/functions_env_vars.yaml"
+    filename = "${path.module}/../extras/cloudbuild/functions_env_vars.yaml"
 }
 
-resource "local_file" "firebase_config_backend" {
-    content  = jsonencode({
-        appId              = google_firebase_web_app.basic.app_id
-        apiKey             = data.google_firebase_web_app_config.basic.api_key
-        authDomain         = data.google_firebase_web_app_config.basic.auth_domain
-        databaseURL        = lookup(data.google_firebase_web_app_config.basic, "database_url", "")
-        storageBucket      = lookup(data.google_firebase_web_app_config.basic, "storage_bucket", "")
-        messagingSenderId  = lookup(data.google_firebase_web_app_config.basic, "messaging_sender_id", "")
-        measurementId      = lookup(data.google_firebase_web_app_config.basic, "measurement_id", "")
-    })
-    filename = "${path.module}/../../src/backend/firebase_config.json"
+data "template_file" "Jenkinsfile" {
+    template = "${file("${path.module}/Jenkinsfile_template.tpl")}"
+    vars     = {
+        project-id          = var.project
+        jenkins-deployer-sa = google_service_account.jenkins_deployer.email
+    }
 }
 
-resource "local_file" "firebase_config_frontend" {
-    content  = jsonencode({
-        appId              = google_firebase_web_app.basic.app_id
-        apiKey             = data.google_firebase_web_app_config.basic.api_key
-        authDomain         = data.google_firebase_web_app_config.basic.auth_domain
-        databaseURL        = lookup(data.google_firebase_web_app_config.basic, "database_url", "")
-        storageBucket      = lookup(data.google_firebase_web_app_config.basic, "storage_bucket", "")
-        messagingSenderId  = lookup(data.google_firebase_web_app_config.basic, "messaging_sender_id", "")
-        measurementId      = lookup(data.google_firebase_web_app_config.basic, "measurement_id", "")
-    })
-    filename = "${path.module}/../../src/frontend/firebase_config.json"
+resource "local_file" "Jenkinsfile" {
+    content  = data.template_file.Jenkinsfile.rendered
+    filename = "${path.module}/../Jenkinsfile"
 }

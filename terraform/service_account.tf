@@ -98,6 +98,18 @@ resource "google_project_iam_member" "jenkins_sa_user" {
   member    = "serviceAccount:${google_service_account.jenkins.email}"
 }
 
+resource "google_service_account" "jenkins_deployer" {
+  project      = var.project
+  account_id   = "jenkins-deployer"
+  display_name = "jenkins-deployer"
+}
+
+resource "google_project_iam_member" "jenkins_storage_object_admin" {
+  project   = var.project
+  role      = "roles/storage.objectAdmin"
+  member    = "serviceAccount:${google_service_account.jenkins_deployer.email}"
+}
+
 resource "google_service_account" "loadgen" {
   project      = var.project
   account_id   = "loadgen"

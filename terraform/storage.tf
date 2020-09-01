@@ -60,8 +60,8 @@ data "archive_file" "src_zip"{
   for_each = toset( ["automl", "detect_labels", "pay_with_stripe", "upload_image", "streamEvents"] )
 
   type        = "zip"
-  source_dir = "${path.module}/../../functions/${each.key}"
-  output_path = "${path.module}/../../functions/zip/${each.key}.zip"
+  source_dir = "${path.module}/../functions/${each.key}"
+  output_path = "${path.module}/../functions/zip/${each.key}.zip"
 }
 
 
@@ -71,5 +71,5 @@ resource "google_storage_bucket_object" "cfunctions_src" {
 
   name   = "${each.key}.zip"
   bucket = google_storage_bucket.storage_cfunctions.name
-  source = "${path.module}/../../functions/zip/${each.key}.zip"
+  source = "${path.module}/../functions/zip/${each.key}.zip"
 }

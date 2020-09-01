@@ -108,8 +108,8 @@ resource "google_cloudfunctions_function" "cf_upload_image" {
   trigger_http          = true
 
   environment_variables = {
-    BIGQUERY_DATASET = sample-data,
-    BIGQUERY_TABLE   = sample-table
+    BIGQUERY_DATASET = "sample-data",
+    BIGQUERY_TABLE   = "sample-table"
   }
 }
 

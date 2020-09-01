@@ -115,8 +115,8 @@ resource "kubernetes_config_map" "service_ip" {
   }
 
   data = {
-      backend = "http://${kubernetes_service.backend.metadata[0].name}.${kubernetes_namespace.backend.metadata[0].name}.svc.cluster.local"
-      frontend = "http://${kubernetes_service.frontend.metadata[0].name}.${kubernetes_namespace.frontend.metadata[0].name}.svc.cluster.local"
+      backend = "http://backend.${kubernetes_namespace.backend.metadata[0].name}.svc.cluster.local"
+      frontend = "http://frontend.${kubernetes_namespace.frontend.metadata[0].name}.svc.cluster.local"
   }
 }
 
