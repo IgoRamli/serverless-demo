@@ -4,25 +4,25 @@ This application is based on [this repository by Google™](https://github.com/G
 
 ## About this Application
 
-Serverless Store is a basic prototype of an e-commerce web application, utilizing various Google Cloud Platform product and several other third party applications. Oh this web app, user can both upload a product to be sold, and purchase a product from other users. For payments, Serverless Store connects to [Stripe](https://stripe.com/) and [SendGrid](https://sendgrid.com/) to process payments via credit card and send email confirmation to users, respectively.
+Serverless Store is a basic prototype of an e-commerce web application, utilizing various Google Cloud Platform product and several other third party applications. On this web app, user can both upload a product to be sold, and purchase a product from other users. For payments, Serverless Store connects to [Stripe](https://stripe.com/) and [SendGrid](https://sendgrid.com/) to process payments via credit card and send email confirmation to users, respectively.
 
-Serverless Store Web Application runs on Kubernetes (Google Kubernetes Engine). It consisted of two microservices that communicates internally using HTTP requests. There is also a load generator inside the Kubernetes cluster that simulates user activity.
+Serverless Store Web Application runs on Kubernetes (Google Kubernetes Engine). It consists of two microservices that communicates internally using HTTP requests. There is also a load generator inside the Kubernetes cluster that constantly simulates user activity.
 
-Outside the web application (and the Kubernetes engine), this application also uses several other GCP Products:
+Outside of the web application (and the Kubernetes engine), this application also uses several other GCP Solutions:
 
-| Products                | Usage                                                                                                                          |
-| ----------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| Cloud Functions         | Performs event-driven jobs such as sending payments to Stripe, sending emails to customers, etc.                               |
-| Firebase Authentication | An OAuth2.0 based authentication service that allows users to login with various means (Email, Google Account, Facebook, etc.) |
-| Firestore Database      | NoSQL type database that stores user data                                                                                      |
-| Cloud AutoML            | Machine Learning service for custom image classification                                                                       |
-| Cloud Vision            | An image classification service that can label numerous store products accurately                                              |
-| Cloud Storage           | Cloud service for storing files anywhere                                                                                       |
-| Stackdriver Logging     | Cloud product that tracks program logs                                                                                         |
+| Products                | Usage                                                                                                                  |
+| ----------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| Cloud Functions         | Performs event-driven jobs such as sending payments to Stripe, sending emails to customers, etc.                       |
+| Firebase Authentication | An OAuth2.0 based authentication service that allows users to login with various means (Email, Google, Facebook, etc.) |
+| Firestore Database      | NoSQL type database that stores user data                                                                              |
+| Cloud AutoML            | Machine Learning service for custom image classification                                                               |
+| Cloud Vision            | An image classification service that can label numerous store products accurately                                      |
+| Cloud Storage           | Cloud service for storing files anywhere                                                                               |
+| Stackdriver Logging     | Cloud product that tracks program logs                                                                                 |
 
 ## Architecture
 
-Serverless Store runs on sever interconnecting products and components. The diagram below visualizes the relationship between those components:
+Serverless Store runs on several interconnecting products and components. The diagram below visualizes the relationship between those components:
 
 ![architecture_general](docs/architecture_general_v1.png)
 
@@ -30,10 +30,7 @@ Serverless Store runs on sever interconnecting products and components. The diag
 
 Serverless Store is created in a way that can be easily set up and tear down as soon as the developer have a GCP Project with billing enabled.
 
-- Add IAM Policy Binding between Kubernetes Service Account and GCP Service Account (There are 3 pairs)
-- Add front end service's IP Address on Firebase Auth Authorized Domain
-
-Before running this set-up guide, please make sure that you have all of the following:
+Before running this set-up guide, please make sure that you have the following:
 
 - A Google Cloud Platform project with billing enabled.
 - An account with owner as a role on the project mentioned before.
@@ -43,8 +40,8 @@ Before running this set-up guide, please make sure that you have all of the foll
 
 In order to use Firebase product for your own Serverless Store, you need to set a Firebase Project for your GCP project.
 
-- Go to [Firebase Console](https://console.firebase.google.com)
-- Click "Add project" card on the Web UI
+- Go to [Firebase Console](https://console.firebase.google.com).
+- Click "Add project" card on the Web UI.
 - On the first step of project creation, select your GCP Project, and click next.
 - You will be given a reminder on the effects of adding Firebase to a Google Cloud Project. Select **Continue**.
 - Turn off the "Enable Google Analytics for this project" switch and click **Add Firebase**.
@@ -66,7 +63,7 @@ In order to use Firebase product for your own Serverless Store, you need to set 
   };
 ```
 
-- Download the `firebase-config.json` file for yout new app.
+- Download the `firebase_config.json` file for yout new app.
 - Place the configuration file from before into both your front end (`/src/frontend`) and back end (`/src/frontend`) folder.
 
 ### Step 2a: Setting up Firestore
@@ -127,7 +124,7 @@ Aside of creating the project, there are some components needed in order to ensu
 
 ### Step 3: Creating a Stripe account
 
-Serverless Store connects with Stripe API for credit card payment processing. Doing so requires developer to have a Stripe account.
+Serverless Store connects with Stripe API for credit card payment processing. Doing so requires a developer to have a Stripe account.
 
 - Go to [Stripe main page](https://stripe.com/).
 - Sign up a new Stripe account. Follow the instructions given.
@@ -140,7 +137,7 @@ _Note: If you are using test API, your Serverless Store will only accept test cr
 
 Cloud AutoML is a suite of machine learning products that enables developers with limited machine learning expertise to train high-quality models specific to their business needs. It relies on Google’s state-of-the-art transfer learning and neural architecture search technology.
 
-One of the more specific use case of AutoML is image classification. In thi step, you will train a Machine Learning model using AutoML by feeding it with several test images.
+One of the more specific use case of AutoML is image classification. In this step, you will train a Machine Learning model using AutoML by feeding it several test images.
 
 - Go to [Cloud Storage](https://console.cloud.google.com/storage), click **Create Bucket**.
 - Fill out the name of the bucket and set the location to `us-central1`.
@@ -162,13 +159,13 @@ Now that you have your training set inside a Cloud Storage bucket, you can creat
 - Wait a few minutes until all images are imported.
 - Go to the `Train` tab and click `Start Training`.
 - If asked, create 1 node for your AutoML model.
-- Once the model is done, go to the `Model` page and write down the `Model ID`. It should be in the format `ICANXXXXXXXXXX...`
+- Once the model is done, go to the `Model` page and write down the `Model ID`. It should be in the format `ICANXXXXXXXXXX...`.
 
 ### Step 5: Enabling Cloud Vision
 
 Google also offer image classification service for a more general purpose. Google Cloud’s Vision API offers powerful pre-trained machine learning models through REST and RPC APIs. For this application, we will use Cloud Vision to assign labels to product images and quickly classify them into several categories predefined by Google.
 
-- [Enable Cloud Vision API](https://console.cloud.google.com/flows/enableapi?apiid=vision.googleapis.com)
+- [Enable Cloud Vision API](https://console.cloud.google.com/flows/enableapi?apiid=vision.googleapis.com).
 
 ### Step 6: Building Deployments
 
@@ -178,34 +175,26 @@ Before you can deploy your Kubernetes cluster, you need to push your modules to 
 - Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/frontend:latest`.
 - Go to folder `/src/backend`.
 - Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/backend:latest`.
+- Go to folder `/src/loadgen`.
+- Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/loadgen:latest`.
 
 ### Step 7: Build using Terraform
 
-The remaining components (Pub/Sub, Cloud Functions, Service Accounts, GKE, Cloud Storage) will be created using Terraform. For details on this components, and how you can deploy it separately, refer to their respective docs. Keep in mind though, that you will need to sort out the component's dependency yourself. This means identifying which components should be deployed before which.
+The remaining components (Pub/Sub, Cloud Functions, Service Accounts, GKE, Cloud Storage) will be created using Terraform. For details on this components, and how you can deploy it separately, refer to their respective docs. Keep in mind though, that you will need to sort out the component's dependency yourself. This means identifying which components should be deployed before which, and adjusting each component's variables for your own configuration (e.g. Changing the project name, GCD bucket name, etc. yourself).
 
 - Ensure that you have Terraform installed in your local machine by running `terraform version`. If your machine does not have Terraform installed, you can install it [here](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 - Go to `/terraform/microservices` and run `terraform init` on the command line.
 - Run `terraform apply`.
-- Fill out your GCP project name, AutoML model ID created on step 4, and Stripe API Token created on step 3 when prompted.
-- Type `yes` when prompted, and wait until Terraform finish createing the remaining components. This may take 5-10 minutes.
-
-### Step 9: Connect your Google Service Account to Kubernetes Service Account
-
-Each microservice module deployed on your Kubernetes cluster requires specific permission to run properly (e.g. Reading Cloud Storage objects requires `Cloud Storage Viewer` role). This roles is already defined in your Terraform-generated Google Service Account. However, Kubernetes deployment uses Kubernetes Service Account for authorization. Therefore, you will need to link your GSA to KSA.
-
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[frontend/frontend-sa]" microservice-fr@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your front end GSA (microservice-fr) to your front end's KSA (frontend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[backend/backend-sa]" microservice-ba@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your back end GSA (microservice-ba) to your back end's KSA (backend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[loadgen/loadgen-sa]" loadgen@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your load generator GSA (loadgen) to your load generator's KSA (loadgen-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-
-For more information on using Workload Identity, refer to [this documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).
+- Fill out your GCP project name, AutoML model ID created on step 4, and Stripe API Token created on step 3 when prompted. If there are variables that you not have or do not wish to use, you can input random values for them.
+- Type `yes` when prompted, and wait until Terraform finish creating the remaining components. This may take 5-10 minutes.
 
 ### Step 10: Add your Kubernetes Load Balancer to authorized domain list
 
-Firebase Authentication restricts it's service to specific addresses only. In order to let you front end module use Firebase Authentication, you need to add it's IP address to authorized domain list.
+Firebase Authentication restricts its service to specific addresses only. In order to let your front end module use Firebase Authentication, you need to add it's IP address to authorized domain list.
 
 - Go to [Kubernetes Engine Service & Ingress](https://console.cloud.google.com/kubernetes/discovery).
 - Copy the front end's LoadBalancer endpoint.
-- Go to [Firebase Authentication Sign-In Method](https://console.firebase.google.com/u/0/project/intern-experiment/authentication/providers).
+- Go to [Firebase Authentication Sign-In Method] page by clicking **Authentication** on the main page navigation drawer.
 - Enable Google as a Sign-In Provider.
 - On the Authorized Domain list, click `Add Domain`.
 - Paste the endpoint as the domain name, then click `Add`.
@@ -220,6 +209,8 @@ If you can access the webpage without any problems, then congratulations! You ha
 
 This repository also integrates tools related to DevOps (Jenkins, Locust) and Data Science (BigQuery, Data Studio). Learn more about how this repository utilizes these tools here:
 
+- [Google Kubernetes Engine](k8s/README.md)
+- [Cloud Functions](functions/README.md)
 - [Simulating User Traffic using Locust](docs/LoadGenerator.md)
 - [Continous Deployment using Jenkins](docs/ContinousIntegration.md)
 - [Extracting Insights using BigQuery and Data Studio](docs/BigQuery.md)

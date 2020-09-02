@@ -1,7 +1,0 @@
-apiVersion: v1
-kind: ServiceAccount
-metadata:
-  name: frontend-sa
-  namespace: frontend
-  annotations:
-    iam.gke.io/gcp-service-account: microservice-fr@intern-experiment.iam.gserviceaccount.com

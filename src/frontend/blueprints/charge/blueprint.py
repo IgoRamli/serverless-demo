@@ -30,8 +30,6 @@ from helpers import product_catalog
 from middlewares.auth import auth_optional
 from middlewares.form_validation import checkout_form_validation_required
 
-PUBSUB_TOPIC_PAYMENT_PROCESS = os.environ.get('PUBSUB_TOPIC_PAYMENT_PROCESS')
-
 BACKEND_URL = os.environ.get("BACKEND_URL", "backend.default.svc.cluster.default")
 
 sde = stackdriver_exporter.StackdriverExporter()

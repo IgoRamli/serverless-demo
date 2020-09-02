@@ -1,6 +1,8 @@
 # Extracting Insights using BigQuery and Data Studio
 
-One of important aspects of an e-commerce is analyzing sales and user data. For a popular store with high amounts of traffic each minute (which is simulated through our [load generator](LoadGenerator.md)), tools for processing huge amounts of data like BigQuery is necessary in order to extract insights from our sales data.
+One of the important aspects of an e-commerce application is analyzing sales and user data. For a popular store with high amounts of traffic each minute (which is simulated through our [load generator](LoadGenerator.md)), tools for processing huge amounts of data like BigQuery is necessary in order to extract insights from our sales data.
+
+BigQuery allows developers to analyze datas efficiently. BigQuery offers on-demand queries and charge users based on their usage only. This makes BigQuery cost-efficient.
 
 ## Architecture
 
@@ -12,7 +14,7 @@ Although our BigQuery database is created automatically by Terraform, we still n
 
 ### Step 1: Instlal Firebase Extension for Real-Time Update
 
-- Create a BigQuery dataset called `sample_data` with table `sample_table` inside. If you have run Terraform from [the main set-up guide](../README.md), this resources whould have been provisioned to you. If you wish to create them manually:
+- Create a BigQuery dataset called `sample_data` with table `sample_table` inside. If you have run Terraform from [the main set-up guide](../README.md), this resources whould have been provisioned to you. If you wish to create them manually, follow these steps:
   - Go to [BigQuery](https://console.cloud.google.com/bigquery) and click your project name on the left drawer.
   - Below the SQL editor, click **Create Dataset**.
   - Name the new dataset `sample_data` and click **Create Dataset**.
@@ -33,7 +35,7 @@ Although our BigQuery database is created automatically by Terraform, we still n
 - Click **Install Extension**.
 - Wait until the installation is finished.
 
-After the installation is finished, go to BigQuery main page. You should see table `orders_raw_changelog` and view `orders_raw_latest` under dataset `sample_data`. If you wish to try out the real-time update feature of this extension, feel free to follow the tutorial given by Firebase when you click **Get Started** on the [Extensions Page](https://console.firebase.google.com/project/intern-experiment/extensions).
+After the installation is finished, go to BigQuery main page. You should see table `orders_raw_changelog` and view `orders_raw_latest` under dataset `sample_data`. If you wish to try out the real-time update feature of this extension, feel free to follow the tutorial given by Firebase when you click **Get Started** on the Extensions Page.
 
 ### Step 2: Backfill your Existing Collections
 

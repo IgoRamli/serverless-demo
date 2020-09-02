@@ -21,8 +21,7 @@ FilePond.setOptions({
   allowReplace: false,
   allowImagePreview: true,
   server: {
-    process:
-      "https://us-central1-intern-experiment.cloudfunctions.net/upload_image", // Change this based on cloud function address
+    process: "MY CLOUD FUNCTIONS TRIGGER TO UPLOAD IMAGE", // Change this based on cloud function address
     fetch: null,
     revert: null,
     restore: null,

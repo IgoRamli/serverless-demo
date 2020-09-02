@@ -4,7 +4,7 @@ Serverless Store uses Cloud Functions to perform several asynchronous process. I
 
 ## Function List
 
-Below are the list of functions deployed to Cloud Functions, along with it's purpose:
+Below are the list of functions deployed to Cloud Functions, along with their respective purposes:
 
 | Name                  | Language | Usage                                                                | Trigger Type                 |
 | --------------------- | -------- | -------------------------------------------------------------------- | ---------------------------- |
@@ -19,7 +19,7 @@ Below are the list of functions deployed to Cloud Functions, along with it's pur
 
 ## Architecture
 
-The diagram below visualizes how Cloud Functions are triggered
+The diagram below visualizes how each Cloud Functions are triggered, and the processes they invoked during their runtime.
 
 ![architecture_cloud_functions](../docs/architecture_cfunctions.png)
 
@@ -35,16 +35,16 @@ This guide assumes that you have completed the first 7 steps of the main set-up 
 
 Serverless store it's product images in a Cloud Storage bucket.
 
-- Go to [Cloud Storage Browser](https://console.cloud.google.com/storage/browser) and click **Create Bucket**
+- Go to [Cloud Storage Browser](https://console.cloud.google.com/storage/browser) and click **Create Bucket**.
 - Fill out the name of your bucket and it's location. Remember the bucket name as it will be needed later.
 
 ### Step 2: Create Pub/Sub topics
 
 You need to create Pub/Sub topics in order to trigger your function properly.
 
-- Go to [Pub/Sub Topic List](https://console.cloud.google.com/cloudpubsub/topic/list) and click **Create Topic**
-- For the topic ID, write down `new-product` and click **Create Topic**
-- Do the same steps to create topic `payment-process` and `payment-completion`
+- Go to [Pub/Sub Topic List](https://console.cloud.google.com/cloudpubsub/topic/list) and click **Create Topic**.
+- For the topic ID, write down `new-product` and click **Create Topic**.
+- Do the same steps to create topic `payment-process` and `payment-completion`.
 
 ### Step 3: Set up the environment variabes
 

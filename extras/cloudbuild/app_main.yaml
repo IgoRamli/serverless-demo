@@ -12,20 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
 runtime: python37
 
 env_variables:
-  GCP_PROJECT: "intern-experiment"
+  GCP_PROJECT: "YOUR_PROJECT_ID"
   PUBSUB_TOPIC_NEW_PRODUCT: "new-product"
   PUBSUB_TOPIC_PAYMENT_PROCESS: "payment-process"
-  GCS_BUCKET: "intern-experiment-storage"
+  GCS_BUCKET: "YUR_GCS_BUCKET"
   FIREBASE_CONFIG: "firebase_config.json"
 
 handlers:
   - url: /static
     static_dir: static
-  
+
   - url: /.*
     script: auto
     secure: always
