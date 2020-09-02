@@ -14,7 +14,7 @@ Aside from the two webapp microservices, there is a third microservice: the load
 
 ## Setting up Google Kubernetes Engine Manually
 
-This repository uses Terraform to set up Kubernetes Engine. If you prefer to set up Kubernetes manually, you can follow this guide:
+This repository uses Terraform to set up Kubernetes Engine. We highly recommend you to use Terraform as primary means of managing k8s. If you prefer to set up Kubernetes manually, you can follow this guide:
 
 ### Prerequisite
 
@@ -28,7 +28,7 @@ The first thing you need to do is to create a new cluster.
 - Write down `microservices` as your cluster name.
 - Select the cluster location of your choice.
 - Go to **Security** tab, and check the **Enable Workload Identity** list.
-- Leave all of the other field with their default values, and click **Create**
+- Leave all of the other field with their default values, and click **Create**.
 - Wait a few minutes. Your cluster will be provisioned shortly!
 
 ### Step 2: Create Google Service Accounts
@@ -60,11 +60,13 @@ Inside a Kubernetes cluster, there exists multiple components, such as namespace
 - Make sure that you have kubectl installed by running `kubectl version`
 - Go to each deployment files (`deployments/frontend.yaml`, `deployments/backend.yaml`, `deployments/loadgen.yaml`), and change the image name to their appropriate location. It should be something like `gcr.io/YOUR_PROEJCT_NAME]/frontend`, `gcr.io/YOUR_PROJECT_NAME]/backend`, and `gcr.io/YOUR_PROEJCT_NAME]/loadgen`)
 - Connect your `kubectl` with your GKE cluster. This can be done by clicking **Connect** at your cluster in the Kubernetes Engine cluster list, and then run the given command in your local machine.
+- Check each manifests file and change the variables (e.g. project name, cloud storage bucket name, etc.) to suit your own environment.
 - Run these commands in this folder (`/k8s/microservices`) and with the correct ordering:
   - `kubectl apply -f namespaces/frontend.yaml`
   - `kubectl apply -f namespaces/backend.yaml`
-  - `kubectl apply -f namespaces/loadgen.yaml`
   - `kubectl apply -f configmaps/service-ip.yaml`
+  - `kubectl apply -f configmaps/frontend.yaml`
+  - `kubectl apply -f configmaps/backendend.yaml`
   - `kubectl apply -f serviceaccounts/frontend.yaml`
   - `kubectl apply -f serviceaccounts/backend.yaml`
   - `kubectl apply -f serviceaccounts/loadgen.yaml`
@@ -82,6 +84,6 @@ Each microservice module deployed on your Kubernetes cluster requires specific p
 
 - Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[frontend/frontend-sa]" microservice-fr@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your front end GSA (microservice-fr) to your front end's KSA (frontend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
 - Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[backend/backend-sa]" microservice-ba@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your back end GSA (microservice-ba) to your back end's KSA (backend-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
-- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[loadgen/loadgen-sa]" loadgen@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your load generator GSA (loadgen) to your load generator's KSA (loadgen-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
+- Run the command `gcloud iam service-accounts add-iam-policy-binding --role roles/iam.workloadIdentityUser --member "serviceAccount:microservices.svc.id.goog[frontend/loadgen-sa]" loadgen@[GCP_PROJECT_NAME].iam.gserviceaccount.com`. This command links your load generator GSA (loadgen) to your load generator's KSA (loadgen-sa). Remember to replace `[GCP_PROJECT_NAME]` with your actual project name.
 
 For more information on using Workload Identity, refer to [this documentation](https://cloud.google.com/kubernetes-engine/docs/how-to/workload-identity).

@@ -8,19 +8,19 @@ Jenkins is a Continoud Integration tool that focuses on building projects. Much 
 
 Jenkins runs as a standalone application in it's own process. This means running in a machine 24/7. To achieve this, Jenkins is usually run inside a server or a virtual machine in a cloud provider.
 
-Jenkins is very customizable due to it's abundance of plugins. This makes Jenkins a preferrable option for CI/CD when working with various cloud providers. With the correct tools, Jenkins can work with your cloud provider to provision multiple VMs to run your pipeline.
+Jenkins is very customizable due to it's abundance of plugins. This makes Jenkins a preferrable option for CI/CD when working with cloud providers. With the correct tools, Jenkins can work with your cloud provider to provision virtual machines to run your pipeline.
 
 Jenkins runs on pipelines. When a pipeline is triggered, it is run on Jenkin's main machine called "Master agent". This agent manages the overall pipeline execution.
 
-To execute stages, Jenkin's master agent can call multiple stage agents to run stages for it. Each stage agents runs exactly one stage (unless there are multiple stages with the same agent configuration. In that case, Jenkins may reuse it's stage agents).
+To execute stages, Jenkin's master agent can call multiple stage agents to run stages for it. Each stage agents runs exactly one stage (unless there are multiple stages with the same agent configuration. In that case, Jenkins may reuse its stage agents).
 
-For our development purpose, stage agents is a Virtual Machine that is provisioned by Google Cloud. Because stage agents is a Virtual Machine, we can use our custom machine image to run stages.
+For our development purpose, stage agents is a Virtual Machine that is provisioned by Google Cloud. Because stage agents is a Virtual Machine, we can use your own custom machine image to run these stages.
 
-Serverless Store's development pipeline contains two stages: `test` and `dockerize`. Testing stage will be run in a docker with Python and NodeJS pre-installed. Dockerize stage is the stage where docker images are built and pushed to GCR. Because `docker` requires a daemon to run, we will run a custom stage agent with custom machine image to build the docker image. This custom image will have GCloud SDK pre-installed, to make image pushing easier.
+Serverless Store's development pipeline contains two stages: `test` and `dockerize`. Testing stage will be run in a docker with Python and NodeJS pre-installed. Dockerize stage is the stage where docker images are built and pushed to GCR. Because `docker` requires a daemon to run, we will run a custom stage agent with custom machine image to build the docker image. This custom image will have GCloud SDK pre-installed, to allow uploading to Google Container Registry.
 
 ## Architecture
 
-The diagram below visualize the process of Continous Integration with Jenkins. GitHub pushes it's repository changes to Jenkins, from which it will run two separate stages. The first unit testing stage runs on a Docker managed on Jenkins main agent. After all the tests run successfully, Jenkins deploy a stage agent that builds and pushes repository to GitHub. Jenkins will inform the build status to GitHub after all processes are completed.
+The diagram below visualize the process of Continous Integration with Jenkins. GitHub pushes it's repository changes to Jenkins, from which it will run two separate stages. The first unit testing stage runs on a Docker managed on Jenkins main agent. After all the tests run successfully, Jenkins deploy a stage agent that builds and pushes Docker images to Google Container Registry. Jenkins will inform the build status to GitHub after all processes are completed.
 
 ![architecture_jenkins](architecture_ci_cd.png)
 

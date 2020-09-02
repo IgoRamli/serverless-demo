@@ -124,7 +124,7 @@ Aside of creating the project, there are some components needed in order to ensu
 
 ### Step 3: Creating a Stripe account
 
-Serverless Store connects with Stripe API for credit card payment processing. Doing so requires developer to have a Stripe account.
+Serverless Store connects with Stripe API for credit card payment processing. Doing so requires a developer to have a Stripe account.
 
 - Go to [Stripe main page](https://stripe.com/).
 - Sign up a new Stripe account. Follow the instructions given.
@@ -137,7 +137,7 @@ _Note: If you are using test API, your Serverless Store will only accept test cr
 
 Cloud AutoML is a suite of machine learning products that enables developers with limited machine learning expertise to train high-quality models specific to their business needs. It relies on Google’s state-of-the-art transfer learning and neural architecture search technology.
 
-One of the more specific use case of AutoML is image classification. In thi step, you will train a Machine Learning model using AutoML by feeding it with several test images.
+One of the more specific use case of AutoML is image classification. In this step, you will train a Machine Learning model using AutoML by feeding it several test images.
 
 - Go to [Cloud Storage](https://console.cloud.google.com/storage), click **Create Bucket**.
 - Fill out the name of the bucket and set the location to `us-central1`.
@@ -159,13 +159,13 @@ Now that you have your training set inside a Cloud Storage bucket, you can creat
 - Wait a few minutes until all images are imported.
 - Go to the `Train` tab and click `Start Training`.
 - If asked, create 1 node for your AutoML model.
-- Once the model is done, go to the `Model` page and write down the `Model ID`. It should be in the format `ICANXXXXXXXXXX...`
+- Once the model is done, go to the `Model` page and write down the `Model ID`. It should be in the format `ICANXXXXXXXXXX...`.
 
 ### Step 5: Enabling Cloud Vision
 
 Google also offer image classification service for a more general purpose. Google Cloud’s Vision API offers powerful pre-trained machine learning models through REST and RPC APIs. For this application, we will use Cloud Vision to assign labels to product images and quickly classify them into several categories predefined by Google.
 
-- [Enable Cloud Vision API](https://console.cloud.google.com/flows/enableapi?apiid=vision.googleapis.com)
+- [Enable Cloud Vision API](https://console.cloud.google.com/flows/enableapi?apiid=vision.googleapis.com).
 
 ### Step 6: Building Deployments
 
@@ -175,20 +175,22 @@ Before you can deploy your Kubernetes cluster, you need to push your modules to 
 - Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/frontend:latest`.
 - Go to folder `/src/backend`.
 - Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/backend:latest`.
+- Go to folder `/src/loadgen`.
+- Run the command `gcloud builds submit --tag gcr.io/[YOUR_GCP_PROJECT_NAME]/loadgen:latest`.
 
 ### Step 7: Build using Terraform
 
-The remaining components (Pub/Sub, Cloud Functions, Service Accounts, GKE, Cloud Storage) will be created using Terraform. For details on this components, and how you can deploy it separately, refer to their respective docs. Keep in mind though, that you will need to sort out the component's dependency yourself. This means identifying which components should be deployed before which.
+The remaining components (Pub/Sub, Cloud Functions, Service Accounts, GKE, Cloud Storage) will be created using Terraform. For details on this components, and how you can deploy it separately, refer to their respective docs. Keep in mind though, that you will need to sort out the component's dependency yourself. This means identifying which components should be deployed before which, and adjusting each component's variables for your own configuration (e.g. Changing the project name, GCD bucket name, etc. yourself).
 
 - Ensure that you have Terraform installed in your local machine by running `terraform version`. If your machine does not have Terraform installed, you can install it [here](https://learn.hashicorp.com/tutorials/terraform/install-cli).
 - Go to `/terraform/microservices` and run `terraform init` on the command line.
 - Run `terraform apply`.
-- Fill out your GCP project name, AutoML model ID created on step 4, and Stripe API Token created on step 3 when prompted.
-- Type `yes` when prompted, and wait until Terraform finish createing the remaining components. This may take 5-10 minutes.
+- Fill out your GCP project name, AutoML model ID created on step 4, and Stripe API Token created on step 3 when prompted. If there are variables that you not have or do not wish to use, you can input random values for them.
+- Type `yes` when prompted, and wait until Terraform finish creating the remaining components. This may take 5-10 minutes.
 
 ### Step 10: Add your Kubernetes Load Balancer to authorized domain list
 
-Firebase Authentication restricts it's service to specific addresses only. In order to let you front end module use Firebase Authentication, you need to add it's IP address to authorized domain list.
+Firebase Authentication restricts its service to specific addresses only. In order to let your front end module use Firebase Authentication, you need to add it's IP address to authorized domain list.
 
 - Go to [Kubernetes Engine Service & Ingress](https://console.cloud.google.com/kubernetes/discovery).
 - Copy the front end's LoadBalancer endpoint.
