@@ -42,3 +42,29 @@ resource "local_file" "Jenkinsfile" {
     content  = data.template_file.Jenkinsfile.rendered
     filename = "${path.module}/../Jenkinsfile"
 }
+
+# resource "local_file" "firebase_config_frontend" {
+#     filename = "${path.module}/../src/frontend/firebase_config.json"
+#     content = jsonencode({
+#         appId              = google_firebase_web_app.serverless_store.app_id
+#         apiKey             = data.google_firebase_web_app_config.serverless_store.api_key
+#         authDomain         = data.google_firebase_web_app_config.serverless_store.auth_domain
+#         databaseURL        = lookup(data.google_firebase_web_app_config.serverless_store, "database_url", "")
+#         storageBucket      = lookup(data.google_firebase_web_app_config.serverless_store, "storage_bucket", "")
+#         messagingSenderId  = lookup(data.google_firebase_web_app_config.serverless_store, "messaging_sender_id", "")
+#         measurementId      = lookup(data.google_firebase_web_app_config.serverless_store, "measurement_id", "")
+#     })
+# }
+
+# resource "local_file" "firebase_config_backend" {
+#     filename = "${path.module}/../src/backend/firebase_config.json"
+#     content = jsonencode({
+#         appId              = google_firebase_web_app.serverless_store.app_id
+#         apiKey             = data.google_firebase_web_app_config.serverless_store.api_key
+#         authDomain         = data.google_firebase_web_app_config.serverless_store.auth_domain
+#         databaseURL        = lookup(data.google_firebase_web_app_config.serverless_store, "database_url", "")
+#         storageBucket      = lookup(data.google_firebase_web_app_config.serverless_store, "storage_bucket", "")
+#         messagingSenderId  = lookup(data.google_firebase_web_app_config.serverless_store, "messaging_sender_id", "")
+#         measurementId      = lookup(data.google_firebase_web_app_config.serverless_store, "measurement_id", "")
+#     })
+# }
