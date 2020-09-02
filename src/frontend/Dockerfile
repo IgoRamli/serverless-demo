@@ -2,10 +2,6 @@ FROM python:3
 
 ENV GAE_ENV standard
 
-ENV GCP_PROJECT intern-experiment
-ENV GCS_BUCKET intern-experiment-storage
-ENV FIREBASE_CONFIG firebase_config.json
-
 COPY . /src/frontend
 
 WORKDIR /src/frontend

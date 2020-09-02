@@ -12,6 +12,10 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# NOTE: This manifest file is made during the pre-Terraform era where all of our k8s components are created using kubectl
+# It is recommended for you to manage you Kubernetes elements using Terraform instead. This manifest file may contain values specific only to our development environment, and may break as soon as you have different project names, values, etc.
+# For guides on setting up your Serverless Store Kubernetes cluster, follow the main set-up guide
+
 # Exposes back end services internally
 
 apiVersion: v1
